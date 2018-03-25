@@ -1,13 +1,14 @@
-import { createDataAction } from "../AppAction";
+
+import { createPayloadAction } from "@app/middlewares/redux-subreducer";
 import { IDatabaseState } from "./DatabaseState";
 
 export const Actions = {
-    update: createDataAction<IDatabaseState>(),
+    update: createPayloadAction<IDatabaseState>(),
 };
 
 export const ActionsCreators = {
     update: (data: IDatabaseState) => ({
-        ...createDataAction<IDatabaseState>(),
+        ...createPayloadAction<IDatabaseState>(),
         data,
     }),
 };

@@ -1,4 +1,4 @@
-﻿import { createAction, createDataAction, getCreator, getDataCreator } from "@app/store/AppAction";
+﻿import { createAction, getActionCreator } from "@app/middlewares/redux-subreducer";
 import { Action } from "redux";
 import * as Store from "./Store";
 
@@ -8,6 +8,6 @@ export const actions = {
 };
 
 export const actionCreators = {
-    increment: getCreator(actions.increment),
-    decrement: getCreator(actions.decrement),
+    increment: getActionCreator(actions.increment),
+    decrement: getActionCreator(actions.decrement),
 };

@@ -1,6 +1,4 @@
-﻿import { createDataAction } from "../AppAction";
-
-export interface ILecturer extends IType {
+﻿export interface ILecturer extends IType {
     id: string;
     firstName: string;
     lastName: string;

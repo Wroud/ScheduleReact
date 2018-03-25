@@ -1,26 +1,26 @@
-import { AppReducer, createReducer, IReducer } from "./store/AppReducer";
-import { IView, IViewState, View } from "./View";
+import { createSubReducer, ISubReducer } from "@app/middlewares/redux-subreducer";
+import { IView, IViewState, IViewStatePart, View } from "./View";
 import { IViewRoute, mapRoutes } from "./ViewRoutes";
 
 export interface IViewLoader<TAppState> {
-    Reducer: IReducer<TAppState, IViewState, IViewState>;
+    Reducer: ISubReducer<TAppState, IViewState, IViewState>;
     Views: ({ [key: string]: IView<any, any, any, any> });
     Api: ({ [key: string]: any });
     Routes: JSX.Element[];
 
-    getView: <TReducerState extends TReducerStateModifed, TState = {}, TReducerStateModifed = {}, TApi = {}>(name: string) => IView<TState, TReducerState, TReducerStateModifed, TApi>;
-    joinToReducer: (reducer: IReducer<TAppState, any, any>) => this;
+    getView: <TReducerState extends TReducerStateModifed, TState extends IViewStatePart, TReducerStateModifed = {}, TApi = {}>(name: string) => IView<TState, TReducerState, TReducerStateModifed, TApi>;
+    joinToReducer: (reducer: ISubReducer<TAppState, any, any>) => this;
     load: () => this;
 }
 
-export class ViewLoader<TAppState> implements IViewLoader<TAppState> {
-    private reducer: IReducer<TAppState, IViewState, IViewState>;
+export class ViewLoader<TAppState extends IViewStatePart> implements IViewLoader<TAppState> {
+    private reducer: ISubReducer<TAppState, IViewState, IViewState>;
     private views: ({ [key: string]: IView<any, any, any, any> });
     private api: ({ [key: string]: any });
     private routes: JSX.Element[];
 
     constructor() {
-        this.reducer = createReducer<TAppState, IViewState, IViewState>("view");
+        this.reducer = createSubReducer<TAppState, IViewState, IViewState>("view");
         this.views = {};
         this.api = {};
         this.routes = [];
@@ -42,7 +42,7 @@ export class ViewLoader<TAppState> implements IViewLoader<TAppState> {
         return this.routes;
     }
 
-    public joinToReducer = (reducer: IReducer<TAppState, any, any>) => {
+    public joinToReducer = (reducer: ISubReducer<TAppState, any, any>) => {
         reducer.join(this.reducer);
         return this;
     }
@@ -97,4 +97,4 @@ export class ViewLoader<TAppState> implements IViewLoader<TAppState> {
     }
 }
 
-export const loadViews = <TState>(): IViewLoader<TState> => new ViewLoader<TState>();
+export const loadViews = <TState extends IViewStatePart>(): IViewLoader<TState> => new ViewLoader<TState>();

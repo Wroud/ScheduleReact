@@ -16,6 +16,7 @@ module.exports = (env) => {
             extensions: ['.js', '.jsx', '.ts', '.tsx'],
             alias: {
                 "@app": path.resolve(__dirname, "./ClientApp/"),
+                "@middlewares": path.resolve(__dirname, "./ClientApp/middlewares/"),
                 //"@components": path.resolve(__dirname, "./ClientApp/components/"),
                 "ClientApp": path.resolve(__dirname, "./ClientApp/"),
             }
@@ -27,7 +28,7 @@ module.exports = (env) => {
         },
         module: {
             rules: [
-                { test: /\.tsx?$/, include: /ClientApp/, use: 'awesome-typescript-loader' },
+                { test: /\.(tsx|ts)?$/, include: /ClientApp/, use: 'awesome-typescript-loader' },
                 //{ test: /\.ts?$/, include: /ClientApp/, use: 'awesome-typescript-loader?silent=true' },
                 { test: /\.(png|jpg|jpeg|gif|svg)$/, use: 'url-loader?limit=25000' }
             ]

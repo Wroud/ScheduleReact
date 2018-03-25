@@ -1,51 +1,46 @@
 ﻿import { Action, Reducer } from "redux";
-import { IApplicationState } from "./";
-import { getActionMeta, IAppAction } from "./AppAction";
+import { getActionMeta, IExtendAction } from "./action";
 
-interface IActionList<TState extends TModifedState, TModifedState> {
-    [key: string]: (state: TState, payload: any) => TModifedState;
+type IActionReducer<TState, TModifedState, TPayload> = (state: TState, payload: TPayload) => TModifedState;
+
+interface IActionReducerList<TState extends TModifedState, TModifedState> {
+    [key: string]: IActionReducer<TState, TModifedState, any>;
 }
 
-export interface IExReducer<TState> {
+export interface INamedReducer<TState> {
     name: string;
     reducer: Reducer<TState>;
 }
 
-export interface IReducer<TState, TReducerState extends TModifedState, TModifedState>
-    extends IExReducer<TReducerState> {
+export interface ISubReducer<TState, TReducerState extends TModifedState, TModifedState>
+    extends INamedReducer<TReducerState> {
 
     path: string;
 
-    setLinkToParent: (reducer: IReducer<TState, any, any>) => void;
-    stateSelector: (state: TState) => TReducerState;
-    on: <TData>(action: IAppAction<TData>, state: (state: TReducerState, payload: TData) => TModifedState) => this;
-    join: (reducer: IReducer<TState, any, any>) => this;
-    joinReducer: <TRState>(name: string, reducer: (state: TRState, action: any) => TRState) => this;
+    setLinkToParent: (reducer: ISubReducer<TState, any, any>) => void;
+    stateSelector: (state: any) => TReducerState;
+    on: <TPayload>(action: IExtendAction<TPayload>, reducer: IActionReducer<TReducerState, TModifedState, TPayload>) => this;
+    join: <T extends TReducerState[keyof TReducerState]>(reducer: ISubReducer<TState, T, T>) => this;
+    joinReducer: <T extends TReducerState[keyof TReducerState]>(name: keyof TReducerState, reducer: (state: T, action: any) => T) => this;
 }
 
 const MainReducerName = "MainReducer";
 
-export class AppReducer<TState, TReducerState extends TModifedState, TModifedState>
-    implements IReducer<TState, TReducerState, TModifedState> {
+export class SubReducer<TState, TReducerState extends TModifedState, TModifedState>
+    implements ISubReducer<TState, TReducerState, TModifedState> {
 
     // tslint:disable-next-line:variable-name
     protected _name: string;
     private initState: TModifedState;
-    private actions: IActionList<TReducerState, TModifedState>;
-    /**
-     * must be deprecated
-     */
-    private registeredActions: string[];
-    private reducers: Array<IExReducer<any>>;
-    private parent: IReducer<TState, any, any>;
+    private actionReducerList: IActionReducerList<TReducerState, TModifedState>;
+    private reducers: Array<INamedReducer<any>>;
+    private parent!: ISubReducer<TState, any, any>;
 
     constructor(name: string, initState?: TModifedState) {
         this.initState = initState || {} as any;
-        this.actions = {} as any;
-        this.registeredActions = [];
+        this.actionReducerList = {} as any;
         this.reducers = [];
         this._name = name;
-        this.parent = {} as any;
     }
 
     get name() {
@@ -58,7 +53,7 @@ export class AppReducer<TState, TReducerState extends TModifedState, TModifedSta
 
     public stateSelector = (state) => this.parent.stateSelector(state)[this._name];
 
-    public setLinkToParent(reducer: IReducer<TState, any, any>) {
+    public setLinkToParent(reducer: ISubReducer<TState, any, any>) {
         this.parent = reducer;
     }
 
@@ -73,15 +68,15 @@ export class AppReducer<TState, TReducerState extends TModifedState, TModifedSta
             nextState[reducer.name] = reducer.reducer(nextState[reducer.name], action);
         });
 
-        if (!this.actions[action.type]) {
+        if (!this.actionReducerList[action.type]) {
             if (this._name === MainReducerName) {
                 console.log("Next app state: ", nextState);
             }
             return nextState;
         }
 
-        const { type, payload } = action as IAppAction<any>;
-        const nextActionState = this.actions[type](nextState, payload || {});
+        const { type, payload } = action as IExtendAction<any>;
+        const nextActionState = this.actionReducerList[type](nextState, payload || {});
         this.deepExtend(nextState, nextActionState);
 
         console.log("reducer: ", this.path);
@@ -98,20 +93,19 @@ export class AppReducer<TState, TReducerState extends TModifedState, TModifedSta
         return nextState;
     }
 
-    public on = <TData>({ type }: IAppAction<TData>, state: (state: TReducerState, data: TData) => TModifedState) => {
-        this.actions[type] = state;
-        this.registeredActions.push(type);
+    public on = <TPayload>({ type }: IExtendAction<TPayload>, state: IActionReducer<TReducerState, TModifedState, TPayload>) => {
+        this.actionReducerList[type] = state;
         return this;
     }
 
-    public join = (reducer: IReducer<TState, any, any>) => {
+    public join = <T extends TReducerState[keyof TReducerState]>(reducer: ISubReducer<TState, T, T>) => {
         this.reducers = this.reducers.filter((el) => el.name !== reducer.name);
-        reducer.setLinkToParent(this);
+        reducer.setLinkToParent(this as ISubReducer<TState, any, any>);
         this.reducers.push(reducer);
         return this;
     }
 
-    public joinReducer = <RState>(name: string, reducer: (state: RState, action: any) => RState) => {
+    public joinReducer = <T extends TReducerState[keyof TReducerState]>(name: keyof TReducerState, reducer: (state: T, action: any) => T) => {
         this.reducers = this.reducers.filter((el) => el.name !== name);
         this.reducers.push({
             name,
@@ -143,7 +137,7 @@ export class AppReducer<TState, TReducerState extends TModifedState, TModifedSta
 }
 
 export class MainReducer<TState extends TModifedState, TModifedState>
-    extends AppReducer<TState, TState, TModifedState> {
+    extends SubReducer<TState, TState, TModifedState> {
 
     constructor(initState?: TModifedState) {
         super(MainReducerName, initState);
@@ -156,9 +150,9 @@ export class MainReducer<TState extends TModifedState, TModifedState>
     public stateSelector = (state) => state;
 }
 
-export function createMainReducer<TState extends TModifedState, TModifedState>(initState?: TModifedState): IReducer<TState, TState, TModifedState> {
+export function createMainReducer<TState extends TModifedState, TModifedState>(initState?: TModifedState): ISubReducer<TState, TState, TModifedState> {
     return new MainReducer<TState, TModifedState>(initState);
 }
-export function createReducer<TParentState, TState extends TModifedState, TModifedState>(name: string, initState?: TState): IReducer<TParentState, TState, TModifedState> {
-    return new AppReducer<TParentState, TState, TModifedState>(name, initState);
+export function createSubReducer<TParentState, TState extends TModifedState, TModifedState>(name: keyof TParentState, initState?: TState): ISubReducer<TParentState, TState, TModifedState> {
+    return new SubReducer<TParentState, TState, TModifedState>(name, initState);
 }

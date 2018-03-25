@@ -15,7 +15,8 @@
     "types": [ "webpack-env" ],
     "paths": {
       "@app/*": [ "ClientApp/*" ],
-      "@components/*": [ "ClientApp/components/*" ]
+      "@components/*": [ "ClientApp/components/*" ],
+      "@middlewares/*": [ "ClientApp/middlewares/*" ]
     }
   },
   "exclude": [
