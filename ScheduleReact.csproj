@@ -21,20 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <TypeScriptCompile Include="ClientApp\store\appAction.ts" />
-    <TypeScriptCompile Include="ClientApp\store\database\Faculty.ts" />
-    <TypeScriptCompile Include="ClientApp\store\database\schema.ts" />
-    <TypeScriptCompile Include="ClientApp\store\database\Lecturer.ts" />
-    <TypeScriptCompile Include="ClientApp\view.tsx" />
-    <TypeScriptCompile Include="ClientApp\Views\Home\Components\Counter.tsx" />
-    <TypeScriptCompile Include="ClientApp\Views\Home\Components\Drawer.tsx" />
-    <TypeScriptCompile Include="ClientApp\Views\Home\Components\Home.tsx" />
-    <TypeScriptCompile Include="ClientApp\Views\Home\Components\index.tsx" />
-    <TypeScriptCompile Include="ClientApp\Views\Home\Components\Layout.tsx" />
-    <TypeScriptCompile Include="ClientApp\Views\Home\Components\TabList.tsx" />
-    <TypeScriptCompile Include="ClientApp\Views\Home\reducer.tsx" />
-    <TypeScriptCompile Include="ClientApp\Views\Home\routes.tsx" />
-    <TypeScriptCompile Include="ClientApp\Views\Home\Store\index.tsx" />
+    <TypeScriptCompile Include="ClientApp\**" />
   </ItemGroup>
 
   <Target Name="DebugRunWebpack" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('wwwroot\dist') ">
