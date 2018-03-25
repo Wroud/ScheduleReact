@@ -10,9 +10,7 @@ export const setStore = (store: Store<IApplicationState | undefined>) => {
     AppStore = store;
 };
 
-const InitalState: IApplicationStateModifed = {
-    testCount: 0,
-};
+const InitalState: IApplicationStateModifed = {};
 
 export const AppReducer =
     createMainReducer<IApplicationState, IApplicationStateModifed>(InitalState)
