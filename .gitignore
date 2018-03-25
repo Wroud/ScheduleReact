@@ -1,0 +1,13 @@
+/wwwroot/dist/
+/ClientApp/dist/
+/node_modules/
+/bin/
+/obj/
+/.git/
+/Properties/launchSettings.json
+/.vscode/
+/.vs/
+yarn.lock
+tslint.json
+*.csproj.user
+npm-shrinkwrap.json
