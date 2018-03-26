@@ -153,6 +153,6 @@ export class MainReducer<TState extends TModifedState, TModifedState>
 export function createMainReducer<TState extends TModifedState, TModifedState>(initState?: TModifedState): ISubReducer<TState, TState, TModifedState> {
     return new MainReducer<TState, TModifedState>(initState);
 }
-export function createSubReducer<TParentState, TState extends TModifedState, TModifedState>(name: keyof TParentState, initState?: TState): ISubReducer<TParentState, TState, TModifedState> {
+export function createSubReducer<TParentState, TState extends TModifedState, TModifedState>(name: keyof TParentState, initState?: TModifedState): ISubReducer<TParentState, TState, TModifedState> {
     return new SubReducer<TParentState, TState, TModifedState>(name, initState);
 }
