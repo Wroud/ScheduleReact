@@ -42,4 +42,4 @@ export function createPayloadAction<TData>(description?: string, from?: string) 
 
 export const getActionMeta = ({ type }: IExtendAction<any>): IActionMeta => createdActions[type] || {};
 export const getActionCreator = (action: Action) => () => action;
-export const getPayloadCreator = <TData>(action: IPayloadAction<TData>) => (data: TData) => ({ ...action, data });
+export const getPayloadCreator = <TData>(action: IPayloadAction<TData>) => (payload: TData) => ({ ...action, payload });
