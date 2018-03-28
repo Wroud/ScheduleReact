@@ -6,6 +6,7 @@ import { Provider } from "react-redux";
 import { Switch } from "react-router";
 import { StaticRouter } from "react-router-dom";
 import { replace } from "react-router-redux";
+import sagaMiddlewareFactory from "redux-saga";
 import configureStore from "./configureStore";
 import { Views } from "./loadViews";
 
@@ -13,7 +14,12 @@ export default createServerRenderer((params) => {
     return new Promise<RenderResult>((resolve, reject) => {
         const basename = params.baseUrl.substring(0, params.baseUrl.length - 1); // remove trailing slash
         const urlAfterBasename = params.url.substring(basename.length);
-        const store = configureStore(createMemoryHistory());
+
+        const sagaMiddleware = sagaMiddlewareFactory();
+
+        const store = configureStore(createMemoryHistory(), undefined, sagaMiddleware);
+        sagaMiddleware.run(Views.Sagas);
+        // console.log(Views);
         store.dispatch(replace(urlAfterBasename));
 
         const routerContext: any = {};
@@ -24,7 +30,7 @@ export default createServerRenderer((params) => {
                 </StaticRouter>
             </Provider>
         );
-        const renderedDoom = renderToString(app);
+        renderToString(app);
 
         if (routerContext.url) {
             resolve({ redirectUrl: routerContext.url });
@@ -33,7 +39,7 @@ export default createServerRenderer((params) => {
 
         params.domainTasks.then(() => {
             resolve({
-                html: renderedDoom,
+                html: renderToString(app),
                 globals: { initialReduxState: store.getState() },
             });
         }, reject);

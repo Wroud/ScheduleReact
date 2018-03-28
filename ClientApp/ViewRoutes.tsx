@@ -12,13 +12,13 @@ export interface IViewRoute {
 }
 
 export const mapRoutes = (routes: IViewRoute[]) =>
-    routes.map((route) => {
+    routes.map((route, id) => {
         const { title, path, exact, component, layout } = route;
         return route.routes ?
             (
-                <Route key={title} {... { path, exact }}>
+                <Route key={id} {... { path, exact }}>
                     {route.layout ? <route.layout>{mapRoutes(route.routes)}</route.layout> : mapRoutes(route.routes)}
                 </Route>
             )
-            : <Route key={title} {... { path, exact, component }} />;
+            : <Route key={id} {... { path, exact, component }} />;
     });

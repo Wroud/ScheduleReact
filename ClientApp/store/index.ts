@@ -1,7 +1,7 @@
 import { Dispatch } from "react-redux";
-import { IApplicationState, IApplicationStateModifed } from "./ApplicationState";
+import { IApplicationState } from "./ApplicationState";
 import * as Reducer from "./reducer";
-export { Reducer, IApplicationState, IApplicationStateModifed };
+export { Reducer, IApplicationState };
 
 export type AppThunkAction<TAction> = (dispatch: (action: TAction) => void, getState: () => IApplicationState) => void;
 

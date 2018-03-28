@@ -1,14 +1,23 @@
 
-import { createPayloadAction } from "@app/middlewares/redux-subreducer";
-import { IDatabaseState } from "./DatabaseState";
+import {
+    createActions,
+    createPayloadAction,
+    getCreators,
+    getPayloadCreator,
+} from "@app/middlewares/redux-subreducer";
+import { IDatabaseState, ITable, Tables } from "./DatabaseState";
+import { ILecturer } from "./Lecturer";
+
+const from = "Database";
+
+export const TableActions = {
+    update: createPayloadAction<ITable<Tables>>("Update database table", from),
+};
+
+export const TableActionsCreators = getCreators(TableActions);
 
 export const Actions = {
-    update: createPayloadAction<IDatabaseState>(),
+    update: createPayloadAction<IDatabaseState>("Update Database", from),
 };
 
-export const ActionsCreators = {
-    update: (data: IDatabaseState) => ({
-        ...createPayloadAction<IDatabaseState>(),
-        data,
-    }),
-};
+export const ActionsCreators = getCreators(Actions);

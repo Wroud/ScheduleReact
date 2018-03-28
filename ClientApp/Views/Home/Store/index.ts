@@ -1,9 +1,5 @@
-﻿export interface IState extends IModifedState {
+﻿export interface IState {
     count: number;
-}
-
-export interface IModifedState {
-    count?: number;
 }
 
 export const Default: IState = {

@@ -8,13 +8,14 @@ export const Navigation: INavigationMember[] =
             exact: true,
         },
         {
-            url: "/Counter/",
-            title: "Counter",
-            path: "/Counter/:startDateIndex?",
-        },
-        {
             url: "/Dashboard/",
             title: "Dashboard",
             path: "/Dashboard/",
+            exact: true,
+        },
+        {
+            url: "/Dashboard/Lecturers/",
+            title: "Lecturers",
+            path: "/Dashboard/Lecturers/",
         },
     ];

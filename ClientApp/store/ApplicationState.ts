@@ -2,13 +2,7 @@ import { RouterState } from "react-router-redux";
 import { IViewState } from "../View";
 import * as Database from "./database";
 
-export interface IApplicationStateModifed {
-    view?: IViewState;
-    database?: Database.IDatabaseState;
-    routing?: RouterState;
-}
-
-export interface IApplicationState extends IApplicationStateModifed {
+export interface IApplicationState {
     view: IViewState;
     database: Database.IDatabaseState;
     routing: RouterState;

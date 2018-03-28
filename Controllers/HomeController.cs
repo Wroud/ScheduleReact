@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ScheduleReact.Database;
+using ScheduleReact.Tools;
 
 namespace ScheduleReact.Controllers {
     public class HomeController : Controller {
@@ -18,7 +19,7 @@ namespace ScheduleReact.Controllers {
         [HttpGet]
         public async Task<IActionResult> GetLecturers () {
             var lecturers = await DbContext.Lecturers.ToListAsync ();
-            return Json (lecturers);
+            return Json (JsonQuery.Create(true).Result(data: lecturers));
         }
 
         public IActionResult Error () {

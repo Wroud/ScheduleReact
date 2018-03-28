@@ -6,6 +6,9 @@ export {
     getActionMeta,
     getActionCreator,
     getPayloadCreator,
+    getCreators,
+    createActions,
+    mapActionsToProps,
 } from "./action";
 export {
     INamedReducer,

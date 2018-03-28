@@ -1,53 +1,39 @@
+import { ISubReducer } from "@app/middlewares/redux-subreducer";
 import { denormalize, normalize, schema } from "normalizr";
 import { IApplicationState } from "../ApplicationState";
 import { AppStore } from "../reducer";
-import { ActionsCreators } from "./actions";
+import { ActionsCreators, TableActionsCreators } from "./actions";
 import { IDatabaseState, ITable, Tables } from "./DatabaseState";
 import { TableReducers } from "./reducer";
 import { Schemas } from "./schema";
 
-export class DbSet<T extends Tables> {
+export class Table<T extends Tables> {
     private name: string;
-    private table: ITable<T>;
-    private database: IDatabaseState;
     private schema: schema.Entity;
     private selector: (state: IApplicationState) => ITable<T>;
 
     constructor(name: keyof IDatabaseState) {
-        this.database = {} as any;
-        this.table = {};
         this.name = name;
         this.selector = TableReducers[name].stateSelector as any;
         this.schema = Schemas[this.name];
-
-        const state = AppStore.getState();
-
-        if (!state) {
-            return;
-        }
-
-        if (state.database) {
-            this.table = TableReducers[name].stateSelector(state) as ITable<T>;
-        }
-
-        this.database = state.database;
-
     }
 
     get stateSelector() {
         return this.selector;
     }
 
-    public get = (id: string): T => this.denormalizer(id, this.database);
+    public get = (id: string): T | undefined => {
+        return this.denormalizer(id);
+    }
 
     public add = (data: T[]): string[] => {
-        const normalizer = this.normalizer(data);
-        AppStore.dispatch(ActionsCreators.update(normalizer.entities));
-        return normalizer.result;
+        const normalizedData = this.normalizer(data);
+        AppStore.dispatch(ActionsCreators.update(normalizedData.entities)); // <====
+        return normalizedData.result;
     }
 
     public remove = (id: string) => {
-        AppStore.dispatch(ActionsCreators.update({ [this.name]: { [id]: "__delete__" } } as any));
+        AppStore.dispatch(TableActionsCreators.update({ [id]: "__delete__" as any })); // <====
     }
 
     public update = (data: T[]) => {
@@ -58,10 +44,16 @@ export class DbSet<T extends Tables> {
         return normalize(data, this.schema);
     }
 
-    private denormalizer = (id: string, database: IDatabaseState) => {
-        return denormalize(this.table[id], this.schema, database);
+    private denormalizer = (id: string) => {
+        const state = AppStore.getState(); // <====
+        if (state && state.database) {
+            const table = this.stateSelector(state);
+            return denormalize(table[id], this.schema, state.database);
+        }
     }
 }
+
+export const openTable = <T extends Tables>(name: keyof IDatabaseState) => new Table<T>(name);
 
 export function SelectDatabase<T extends IDatabaseState[keyof IDatabaseState]>(db: (database: IDatabaseState) => T) {
     return (state: IApplicationState) => db(state.database);
