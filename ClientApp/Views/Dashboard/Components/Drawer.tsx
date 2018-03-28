@@ -6,7 +6,6 @@ import {
 } from "rmwc/Drawer";
 
 import {
-    List,
     ListItem,
     ListItemGraphic,
     ListItemText,

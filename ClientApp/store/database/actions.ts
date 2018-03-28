@@ -1,12 +1,5 @@
-
-import {
-    createActions,
-    createPayloadAction,
-    getCreators,
-    getPayloadCreator,
-} from "@app/middlewares/redux-subreducer";
+import { createPayloadAction, getCreators } from "@app/middlewares/redux-subreducer";
 import { IDatabaseState, ITable, Tables } from "./DatabaseState";
-import { ILecturer } from "./Lecturer";
 
 const from = "Database";
 

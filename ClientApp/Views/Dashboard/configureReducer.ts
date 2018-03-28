@@ -1,5 +1,4 @@
 ﻿import { createSubReducer } from "@app/middlewares/redux-subreducer";
-import { IApplicationState } from "@app/store";
 import { IViewState } from "@app/View";
 import { actions, lecturersActions } from "./actions";
 import * as Store from "./Store";

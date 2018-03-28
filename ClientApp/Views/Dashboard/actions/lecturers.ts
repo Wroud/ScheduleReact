@@ -2,9 +2,7 @@
     createAction,
     createActions,
     createPayloadAction,
-    getActionCreator,
     getCreators,
-    getPayloadCreator,
     mapActionsToProps,
 } from "@app/middlewares/redux-subreducer";
 

@@ -1,4 +1,3 @@
-import { ISubReducer } from "@app/middlewares/redux-subreducer";
 import { denormalize, normalize, schema } from "normalizr";
 import { IApplicationState } from "../ApplicationState";
 import { AppStore } from "../reducer";

@@ -1,6 +1,5 @@
 import { IApplicationState } from "@app/store";
-import { SelectFromTable } from "@app/store/database/DbSet";
-import { ILecturer } from "@app/store/database/Lecturer";
+import { ILecturer, SelectFromTable } from "@app/store/database";
 import { createSelector } from "reselect";
 import { LecturersReducer } from "../configureReducer";
 
@@ -11,6 +10,6 @@ export const getLecturers = (state: IApplicationState) => LecturersReducer.state
 export const makeGetLecturer = () => {
     return createSelector(
         SelectFromTable((db) => db.lecturers, (id: string) => id),
-        (lecturer) => ({ ...lecturer }),
+        (lecturer): ILecturer => ({ ...lecturer }),
     );
 };

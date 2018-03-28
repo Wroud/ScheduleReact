@@ -1,4 +1,9 @@
-﻿import { Action, ActionCreatorsMapObject, bindActionCreators, Dispatch } from "redux";
+﻿import {
+    Action,
+    ActionCreatorsMapObject,
+    bindActionCreators,
+    Dispatch,
+} from "redux";
 
 export interface IExtendAction<TData = {}>
     extends Action {

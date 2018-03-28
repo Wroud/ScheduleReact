@@ -2,23 +2,23 @@ import { createSubReducer } from "@app/middlewares/redux-subreducer";
 import { IApplicationState } from "../ApplicationState";
 import { Actions, TableActions } from "./actions";
 import { IDatabaseState, ITable } from "./DatabaseState";
-import { IFaculty } from "./Faculty";
-import { ILecturer } from "./Lecturer";
+import { FacultyTableName, IFaculty } from "./Faculty";
+import { ILecturer, LecturerTableName } from "./Lecturer";
 
-const FacultyReducer = createSubReducer<IDatabaseState, ITable<IFaculty>>("faculties")
+const FacultyReducer = createSubReducer<IDatabaseState, ITable<IFaculty>>(FacultyTableName)
     .on(TableActions.update, (state, data) => data as ITable<IFaculty>);
 
-const LecturerReducer = createSubReducer<IDatabaseState, ITable<ILecturer>>("lecturers")
+const LecturerReducer = createSubReducer<IDatabaseState, ITable<ILecturer>>(LecturerTableName)
     .on(TableActions.update, (state, data) => data as ITable<ILecturer>);
 
 export const TableReducers = {
-    faculties: FacultyReducer,
-    lecturers: LecturerReducer,
+    [FacultyTableName]: FacultyReducer,
+    [LecturerTableName]: LecturerReducer,
 };
 
 export const DefaultState: IDatabaseState = {
-    faculties: {},
-    lecturers: {},
+    [FacultyTableName]: {},
+    [LecturerTableName]: {},
 };
 
 export const Reducer =

@@ -1,13 +1,13 @@
-import * as Faculty from "./Faculty";
-import * as Lecturer from "./Lecturer";
+import { FacultyTableName, IFaculty } from "./Faculty";
+import { ILecturer, LecturerTableName } from "./Lecturer";
 
-export type Tables = Lecturer.ILecturer | Faculty.IFaculty;
+export type Tables = ILecturer | IFaculty;
 
 export interface ITable<T> {
     [id: string]: T;
 }
 
 export interface IDatabaseState {
-    lecturers: ITable<Lecturer.ILecturer>;
-    faculties: ITable<Faculty.IFaculty>;
+    [LecturerTableName]: ITable<ILecturer>;
+    [FacultyTableName]: ITable<IFaculty>;
 }

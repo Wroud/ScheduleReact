@@ -1,8 +1,11 @@
-﻿import * as Faculty from "./Faculty";
-import * as Lecturer from "./Lecturer";
-import { Schemas } from "./schema";
-
-export { IDatabaseState } from "./DatabaseState";
+﻿export { IFaculty } from "./Faculty";
+export { ILecturer } from "./Lecturer";
+export { IDatabaseState, Tables } from "./DatabaseState";
 export { Reducer } from "./reducer";
-
-export { Lecturer, Faculty };
+export {
+    Table,
+    openTable,
+    SelectDatabase,
+    SelectFromTable,
+    SelectEntries,
+} from "./Table";

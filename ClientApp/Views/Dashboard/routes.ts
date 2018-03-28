@@ -1,8 +1,5 @@
 ﻿import { IViewRoute, mapRoutes } from "@app/ViewRoutes";
-import * as React from "react";
-import { RouteComponentProps } from "react-router";
-import { Route } from "react-router-dom";
-import { Counter, Home, Layout, Lecturers } from "./Components/";
+import { Home, Layout, Lecturers } from "./Components/";
 
 export const Routes: IViewRoute[] = [
     {

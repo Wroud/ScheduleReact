@@ -1,9 +1,8 @@
 import { IApplicationState } from "@app/store";
-import { ILecturer } from "@app/store/database/Lecturer";
+import { ILecturer } from "@app/store/database";
 import * as React from "react";
 import { connect } from "react-redux";
 import {
-    List,
     SimpleListItem,
 } from "rmwc/List";
 import * as Actions from "../../actions";
