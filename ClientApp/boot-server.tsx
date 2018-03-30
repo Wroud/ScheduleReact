@@ -8,7 +8,7 @@ import { StaticRouter } from "react-router-dom";
 import { replace } from "react-router-redux";
 import sagaMiddlewareFactory from "redux-saga";
 import configureStore from "./configureStore";
-import { Views } from "./loadViews";
+import { views } from "./loadViews";
 
 export default createServerRenderer((params) => {
     return new Promise<RenderResult>((resolve, reject) => {
@@ -18,7 +18,7 @@ export default createServerRenderer((params) => {
         const sagaMiddleware = sagaMiddlewareFactory();
 
         const store = configureStore(createMemoryHistory(), undefined, sagaMiddleware);
-        sagaMiddleware.run(Views.Sagas);
+        sagaMiddleware.run(views.sagas);
         // console.log(Views);
         store.dispatch(replace(urlAfterBasename));
 
@@ -26,7 +26,7 @@ export default createServerRenderer((params) => {
         const app = (
             <Provider store={store}>
                 <StaticRouter basename={basename} context={routerContext} location={params.location.path}>
-                    <Switch>{Views.Routes}</Switch>
+                    <Switch>{views.routes}</Switch>
                 </StaticRouter>
             </Provider>
         );

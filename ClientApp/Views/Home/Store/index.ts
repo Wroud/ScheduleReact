@@ -2,6 +2,6 @@
     count: number;
 }
 
-export const Default: IState = {
+export const initState: IState = {
     count: 0,
 };

@@ -8,7 +8,7 @@ import { LinearProgress } from "rmwc/LinearProgress";
 import { Typography } from "rmwc/Typography";
 
 import * as Actions from "../../actions";
-import { LecturersReducer } from "../../reducers";
+import { lecturersReducer } from "../../reducers";
 import { ILecturersState } from "../../Store";
 import LecturerForm from "./LecturerForm";
 import LecturersList from "./LecturersList";
@@ -48,12 +48,12 @@ class Lecturers extends React.PureComponent<LecturersProps> {
 }
 
 export const ListProgress = connect(
-    (state) => ({ determinate: !LecturersReducer.stateSelector(state).loading }),
+    (state) => ({ determinate: !lecturersReducer.stateSelector(state).loading }),
     () => ({}),
 )(LinearProgress);
 
 export const FormProgress = connect(
-    (state) => ({ determinate: !LecturersReducer.stateSelector(state).form.loading }),
+    (state) => ({ determinate: !lecturersReducer.stateSelector(state).form.loading }),
     () => ({}),
 )(LinearProgress);
 

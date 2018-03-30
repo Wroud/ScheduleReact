@@ -18,14 +18,14 @@ const sagaMiddleware = sagaMiddlewareFactory();
 const initialState = (window as any).initialReduxState;
 const store = configureStore(history, initialState, sagaMiddleware);
 
-let appViews = ViewsModule.Views;
-sagaMiddleware.run(appViews.Sagas);
+let appViews = ViewsModule.views;
+sagaMiddleware.run(appViews.sagas);
 
 function renderApp() {
     ReactDOM.hydrate(
         <AppContainer>
             <Provider store={store}>
-                <ConnectedRouter history={history}><Switch>{appViews.Routes}</Switch></ConnectedRouter>
+                <ConnectedRouter history={history}><Switch>{appViews.routes}</Switch></ConnectedRouter>
             </Provider>
         </AppContainer>,
         document.getElementById("react-app"),
@@ -36,8 +36,8 @@ renderApp();
 
 if (module.hot) {
     module.hot.accept("./loadViews", () => {
-        appViews = require<typeof ViewsModule>("./loadViews").Views;
-        sagaMiddleware.run(appViews.Sagas);
+        appViews = require<typeof ViewsModule>("./loadViews").views;
+        sagaMiddleware.run(appViews.sagas);
         renderApp();
     });
 }

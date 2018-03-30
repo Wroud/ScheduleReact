@@ -1,10 +1,10 @@
 import { denormalize, normalize, schema } from "normalizr";
 import { IApplicationState } from "../ApplicationState";
-import { AppStore } from "../reducer";
-import { ActionsCreators, TableActionsCreators } from "./actions";
+import { appStore } from "../reducer";
+import { actionsCreators, tableActionsCreators } from "./actions";
 import { IDatabaseState, ITable, Tables } from "./DatabaseState";
-import { TableReducers } from "./reducer";
-import { Schemas } from "./schema";
+import { tableReducers } from "./reducer";
+import { schemas } from "./schema";
 
 export class Table<T extends Tables> {
     private name: string;
@@ -13,8 +13,8 @@ export class Table<T extends Tables> {
 
     constructor(name: keyof IDatabaseState) {
         this.name = name;
-        this.selector = TableReducers[name].stateSelector as any;
-        this.schema = Schemas[this.name];
+        this.selector = tableReducers[name].stateSelector as any;
+        this.schema = schemas[this.name];
     }
 
     get stateSelector() {
@@ -26,7 +26,7 @@ export class Table<T extends Tables> {
     }
 
     public getAllIds = (): string[] => {
-        const state = AppStore.getState(); // <====
+        const state = appStore.getState(); // <====
         if (state && state.database) {
             const table = this.stateSelector(state);
             return Object.keys(table);
@@ -36,12 +36,12 @@ export class Table<T extends Tables> {
 
     public add = (data: T[]): string[] => {
         const normalizedData = this.normalizer(data);
-        AppStore.dispatch(ActionsCreators.update(normalizedData.entities)); // <====
+        appStore.dispatch(actionsCreators.update(normalizedData.entities)); // <====
         return normalizedData.result;
     }
 
     public remove = (id: string) => {
-        AppStore.dispatch(TableActionsCreators[this.name].update({ [id]: "__delete__" as any })); // <====
+        appStore.dispatch(tableActionsCreators[this.name].update({ [id]: "__delete__" as any })); // <====
     }
 
     public update = (data: T[]) => {
@@ -53,7 +53,7 @@ export class Table<T extends Tables> {
     }
 
     private denormalizer = (id: string) => {
-        const state = AppStore.getState(); // <====
+        const state = appStore.getState(); // <====
         if (state && state.database) {
             const table = this.stateSelector(state);
             return denormalize(table[id], this.schema, state.database);

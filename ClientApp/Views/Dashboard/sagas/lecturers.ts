@@ -2,12 +2,12 @@ import { JsonQueryResult } from "@app/middlewares/JsonQuery";
 import { ILecturer, openTable } from "@app/store/database";
 import { call, put, select } from "redux-saga/effects";
 import { lecturersActionCreators, lecturersActions } from "../actions";
-import { Api } from "../api";
-import { LecturerFormReducer } from "../reducers";
+import { api } from "../api";
+import { lecturerFormReducer } from "../reducers";
 
 export function* fetchData(action) {
     try {
-        const query: JsonQueryResult<ILecturer[]> = yield call(Api.lecturers.load);
+        const query: JsonQueryResult<ILecturer[]> = yield call(api.lecturers.load);
         const db = openTable<ILecturer>("lecturers");
         const result = yield db.add(query.data);
         yield put(lecturersActionCreators.lecturers.actions.update(result));
@@ -21,8 +21,8 @@ export function* fetchData(action) {
 export function* submitLecturer(action) {
     yield put(lecturersActions.form.setLoading);
     try {
-        const lecturer: ILecturer = yield select((state) => LecturerFormReducer.stateSelector(state).lecturer);
-        const query: JsonQueryResult<ILecturer> = yield call(Api.lecturers.addOrEdit, lecturer);
+        const lecturer: ILecturer = yield select((state) => lecturerFormReducer.stateSelector(state).lecturer);
+        const query: JsonQueryResult<ILecturer> = yield call(api.lecturers.addOrEdit, lecturer);
         if (query.state) {
             const db = openTable<ILecturer>("lecturers");
             const result = yield db.add([query.data]);
@@ -40,7 +40,7 @@ export function* deleteLecturer(action: typeof lecturersActions.lecturer.delete)
     yield put(lecturersActions.lecturers.setLoading);
     try {
         const id = action.payload;
-        const query: JsonQueryResult<ILecturer> = yield call(Api.lecturers.delete, id);
+        const query: JsonQueryResult<ILecturer> = yield call(api.lecturers.delete, id);
         if (query.state) {
             const db = openTable<ILecturer>("lecturers");
             db.remove(id);

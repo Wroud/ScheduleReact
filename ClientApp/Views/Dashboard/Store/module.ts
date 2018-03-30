@@ -5,6 +5,6 @@ export interface IState {
     count: number;
 }
 
-export const InitState: Partial<IState> = {
+export const initState: Partial<IState> = {
     count: 0,
 };

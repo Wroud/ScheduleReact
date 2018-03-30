@@ -1,5 +1,5 @@
-import { FacultyTableName, IFaculty } from "./Faculty";
-import { ILecturer, LecturerTableName } from "./Lecturer";
+import { facultyTableName, IFaculty } from "./Faculty";
+import { ILecturer, lecturerTableName } from "./Lecturer";
 
 export type Tables = ILecturer | IFaculty;
 
@@ -8,6 +8,6 @@ export interface ITable<T> {
 }
 
 export interface IDatabaseState {
-    [LecturerTableName]: ITable<ILecturer>;
-    [FacultyTableName]: ITable<IFaculty>;
+    [lecturerTableName]: ITable<ILecturer>;
+    [facultyTableName]: ITable<IFaculty>;
 }

@@ -8,7 +8,7 @@ import { TextField, TextFieldHelperText, TextFieldIcon } from "rmwc/TextField";
 
 import { ILecturer } from "@app/store/database";
 import * as Actions from "../../actions";
-import { LecturerFormReducer } from "../../reducers";
+import { lecturerFormReducer } from "../../reducers";
 import { ILecturerFormState } from "../../Store/Lecturers";
 
 type Props =
@@ -86,7 +86,7 @@ export const FormTextField = (name: string, label: string, ...attr: any[]) => co
             name,
             id: name,
             label,
-            value: LecturerFormReducer.stateSelector(state).lecturer[name],
+            value: lecturerFormReducer.stateSelector(state).lecturer[name],
             ...attr,
         }),
     () => ({}),
@@ -97,7 +97,7 @@ export const FormSelect = (name: string, label: string, ...attr: any[]) => conne
         name,
         id: name,
         label,
-        value: LecturerFormReducer.stateSelector(state).lecturer[name] + "",
+        value: lecturerFormReducer.stateSelector(state).lecturer[name] + "",
         ...attr,
     }),
     () => ({}),
@@ -105,7 +105,7 @@ export const FormSelect = (name: string, label: string, ...attr: any[]) => conne
 
 export default connect(
     (state) => {
-        const mapState = LecturerFormReducer.stateSelector(state);
+        const mapState = lecturerFormReducer.stateSelector(state);
         return {
             editing: mapState.editing,
             editingId: mapState.lecturer.id,

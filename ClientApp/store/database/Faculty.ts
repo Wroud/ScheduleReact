@@ -1,5 +1,5 @@
 ﻿import { ILecturer } from "./Lecturer";
-export const FacultyTableName = "faculties";
+export const facultyTableName = "faculties";
 export interface IFaculty {
     id: string;
     shortName: string;

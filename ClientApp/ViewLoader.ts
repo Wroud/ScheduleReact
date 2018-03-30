@@ -6,52 +6,52 @@ import { IViewRoute, mapRoutes } from "./ViewRoutes";
 type SagaGetter = () => SagaIterator;
 
 export interface IViewLoader<TAppState> {
-    Reducer: ISubReducer<TAppState, IViewState>;
-    Views: ({ [key: string]: IView<any, any, any> });
-    Api: ({ [key: string]: any });
-    Routes: JSX.Element[];
+    reducer: ISubReducer<TAppState, IViewState>;
+    views: ({ [key: string]: IView<any, any, any> });
+    api: ({ [key: string]: any });
+    routes: JSX.Element[];
 
-    Sagas: () => SagaIterator;
+    sagas: () => SagaIterator;
     getView: <TReducerState extends TReducerStateModifed, TState extends IViewStatePart, TReducerStateModifed = {}, TApi = {}>(name: string) => IView<TState, TReducerState, TApi>;
     joinToReducer: (reducer: ISubReducer<TAppState, any>) => this;
     load: () => this;
 }
 
 export class ViewLoader<TAppState extends IViewStatePart> implements IViewLoader<TAppState> {
-    private reducer: ISubReducer<TAppState, IViewState>;
-    private views: ({ [key: string]: IView<any, any, any> });
-    private api: ({ [key: string]: any });
-    private routes: JSX.Element[];
-    private sagas: SagaGetter[];
+    private _reducer: ISubReducer<TAppState, IViewState>;
+    private _views: ({ [key: string]: IView<any, any, any> });
+    private _api: ({ [key: string]: any });
+    private _routes: JSX.Element[];
+    private _sagas: SagaGetter[];
 
     constructor() {
-        this.reducer = createSubReducer<TAppState, IViewState>("view");
-        this.views = {};
-        this.api = {};
-        this.routes = [];
-        this.sagas = [];
+        this._reducer = createSubReducer<TAppState, IViewState>("view");
+        this._views = {};
+        this._api = {};
+        this._routes = [];
+        this._sagas = [];
 
-        this.Sagas = this.Sagas.bind(this);
+        this.sagas = this.sagas.bind(this);
     }
 
-    get Views() {
-        return this.views;
+    get views() {
+        return this._views;
     }
 
-    get Reducer() {
-        return this.reducer;
+    get reducer() {
+        return this._reducer;
     }
 
-    get Api() {
-        return this.api;
+    get api() {
+        return this._api;
     }
 
-    get Routes() {
-        return this.routes;
+    get routes() {
+        return this._routes;
     }
 
-    public *Sagas() {
-        for (const saga of this.sagas) {
+    public *sagas() {
+        for (const saga of this._sagas) {
             for (const effect of saga()) {
                 yield effect;
             }
@@ -59,20 +59,20 @@ export class ViewLoader<TAppState extends IViewStatePart> implements IViewLoader
     }
 
     public joinToReducer = (reducer: ISubReducer<TAppState, any>) => {
-        reducer.join(this.reducer);
+        reducer.join(this._reducer);
         return this;
     }
 
     public getView = (view: string) => {
         console.log(this);
-        return this.views[view];
+        return this._views[view];
     }
 
     public load = () => {
         const routeLoader = require.context("./Views/", true, /^\.\/[^\/]+\/routes.ts$/);
         routeLoader.keys().forEach((el) => {
-            const routes = mapRoutes(routeLoader<any>(el).Routes as IViewRoute[]);
-            this.routes.push(routes);
+            const routes = mapRoutes(routeLoader<any>(el).routes as IViewRoute[]);
+            this._routes.push(routes);
         });
 
         const context = require.context("./Views/", true, /^\.\/[^\/]+\/module.ts$/);
@@ -85,24 +85,24 @@ export class ViewLoader<TAppState extends IViewStatePart> implements IViewLoader
 
             view.loader = this;
 
-            this.views = {
-                ...this.views,
+            this._views = {
+                ...this._views,
                 [view.name]: view,
             };
 
             if (view.sagas) {
-                this.sagas.push(view.sagas);
+                this._sagas.push(view.sagas);
             }
 
             if (view.api) {
-                this.api = {
-                    ...this.api,
+                this._api = {
+                    ...this._api,
                     [`${view.name}Api`]: view.api,
                 };
             }
 
             if (view.reducer) {
-                this.reducer.join(view.reducer);
+                this._reducer.join(view.reducer);
             }
 
             console.log("Loaded View: ", view);

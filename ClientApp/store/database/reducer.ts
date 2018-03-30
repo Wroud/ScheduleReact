@@ -1,28 +1,28 @@
 import { createSubReducer } from "@app/middlewares/redux-subreducer";
 import { IApplicationState } from "../ApplicationState";
-import { Actions, TableActions } from "./actions";
+import { actions, tableActions } from "./actions";
 import { IDatabaseState, ITable } from "./DatabaseState";
-import { FacultyTableName, IFaculty } from "./Faculty";
-import { ILecturer, LecturerTableName } from "./Lecturer";
+import { facultyTableName, IFaculty } from "./Faculty";
+import { ILecturer, lecturerTableName } from "./Lecturer";
 
-const FacultyReducer = createSubReducer<IDatabaseState, ITable<IFaculty>>(FacultyTableName)
-    .on(TableActions[FacultyTableName].update, (state, data) => data as ITable<IFaculty>);
+const facultyReducer = createSubReducer<IDatabaseState, ITable<IFaculty>>(facultyTableName)
+    .on(tableActions[facultyTableName].update, (state, data) => data as ITable<IFaculty>);
 
-const LecturerReducer = createSubReducer<IDatabaseState, ITable<ILecturer>>(LecturerTableName)
-    .on(TableActions[LecturerTableName].update, (state, data) => data as ITable<ILecturer>);
+const lecturerReducer = createSubReducer<IDatabaseState, ITable<ILecturer>>(lecturerTableName)
+    .on(tableActions[lecturerTableName].update, (state, data) => data as ITable<ILecturer>);
 
-export const TableReducers = {
-    [FacultyTableName]: FacultyReducer,
-    [LecturerTableName]: LecturerReducer,
+export const tableReducers = {
+    [facultyTableName]: facultyReducer,
+    [lecturerTableName]: lecturerReducer,
 };
 
-export const DefaultState: IDatabaseState = {
-    [FacultyTableName]: {},
-    [LecturerTableName]: {},
+export const defaultState: IDatabaseState = {
+    [facultyTableName]: {},
+    [lecturerTableName]: {},
 };
 
-export const Reducer =
-    createSubReducer<IApplicationState, IDatabaseState>("database", DefaultState)
-        .join(LecturerReducer)
-        .join(FacultyReducer)
-        .on(Actions.update, (state, data) => data);
+export const reducer =
+    createSubReducer<IApplicationState, IDatabaseState>("database", defaultState)
+        .join(lecturerReducer)
+        .join(facultyReducer)
+        .on(actions.update, (state, data) => data);

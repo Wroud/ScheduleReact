@@ -1,6 +1,6 @@
 import { INavigationMember } from "@app/Navigation";
 
-export const Navigation: INavigationMember[] =
+export const navigation: INavigationMember[] =
     [
         {
             url: "/",

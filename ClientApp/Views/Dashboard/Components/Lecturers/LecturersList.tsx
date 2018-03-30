@@ -4,7 +4,7 @@ import {
     List,
 } from "rmwc/List";
 import * as Actions from "../../actions";
-import { LecturersReducer } from "../../reducers";
+import { lecturersReducer } from "../../reducers";
 import { ILecturersState } from "../../Store";
 import Lecturer from "./Lecturer";
 
@@ -28,6 +28,6 @@ export class LecturersList extends React.PureComponent<Props> {
 }
 
 export default connect(
-    (state) => ({ lecturers: LecturersReducer.stateSelector(state).lecturers }),
+    (state) => ({ lecturers: lecturersReducer.stateSelector(state).lecturers }),
     Actions.lecturersActionsMap.lecturers,
 )(LecturersList);

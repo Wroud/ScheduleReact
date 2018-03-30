@@ -1,7 +1,7 @@
 ﻿import { IViewRoute, mapRoutes } from "@app/ViewRoutes";
 import { Home, Layout, Lecturers } from "./Components/";
 
-export const Routes: IViewRoute[] = [
+export const routes: IViewRoute[] = [
     {
         title: "Dashboard",
         path: "/Dashboard/",

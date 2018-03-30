@@ -1,10 +1,10 @@
 ﻿export {
     IState,
-    InitState,
+    initState,
 } from "./module";
 export {
     ILecturersState,
-    InitLecturersState,
+    initLecturersState,
     ILecturerFormState,
-    InitLecturerFormState,
+    initLecturerFormState,
 } from "./Lecturers";

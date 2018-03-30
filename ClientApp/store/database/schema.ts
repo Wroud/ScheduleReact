@@ -1,14 +1,14 @@
 ﻿import { schema } from "normalizr";
-import { FacultyTableName } from "./Faculty";
-import { LecturerTableName } from "./Lecturer";
+import { facultyTableName } from "./Faculty";
+import { lecturerTableName } from "./Lecturer";
 
 // schema definitions
-const lecturer = new schema.Entity(LecturerTableName);
-const faculty = new schema.Entity(FacultyTableName, {
+const lecturer = new schema.Entity(lecturerTableName);
+const faculty = new schema.Entity(facultyTableName, {
     dean: lecturer,
 });
 
-export const Schemas = {
+export const schemas = {
     lecturers: [lecturer],
     faculties: [faculty],
 };

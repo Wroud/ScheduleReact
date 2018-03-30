@@ -2,8 +2,8 @@
 import { IViewState } from "@app/View";
 import { actions, lecturersActions } from "../actions";
 import * as Store from "../Store";
-import { LecturersReducer } from "./lecturer";
+import { lecturersReducer } from "./lecturer";
 
 export const configureReducer = (name: string) =>
-        createSubReducer<IViewState, Store.IState>(name, Store.InitState)
-                .join(LecturersReducer);
+        createSubReducer<IViewState, Store.IState>(name, Store.initState)
+                .join(lecturersReducer);

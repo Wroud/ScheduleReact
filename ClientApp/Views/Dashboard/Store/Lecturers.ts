@@ -12,7 +12,7 @@ export interface ILecturersState {
     loading: boolean;
 }
 
-export const InitLecturerFormState: Partial<ILecturerFormState> = {
+export const initLecturerFormState: Partial<ILecturerFormState> = {
     loading: false,
     editing: false,
     lecturer: {
@@ -25,8 +25,8 @@ export const InitLecturerFormState: Partial<ILecturerFormState> = {
     },
 };
 
-export const InitLecturersState: Partial<ILecturersState> = {
+export const initLecturersState: Partial<ILecturersState> = {
     lecturers: [],
-    form: InitLecturerFormState as ILecturerFormState,
+    form: initLecturerFormState as ILecturerFormState,
     loading: true,
 };

@@ -4,7 +4,7 @@ import { RouteComponentProps } from "react-router";
 import { Route } from "react-router-dom";
 import { Counter, Home, Layout } from "./Components/";
 
-export const Routes: IViewRoute[] = [
+export const routes: IViewRoute[] = [
     {
         title: "Home",
         path: "/",

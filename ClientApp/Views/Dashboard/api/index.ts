@@ -1,5 +1,5 @@
-import { LecturersApi } from "./lecturers";
+import { lecturersApi } from "./lecturers";
 
-export const Api = {
-    lecturers: LecturersApi,
+export const api = {
+    lecturers: lecturersApi,
 };

@@ -1,7 +1,7 @@
-import { IApplicationState, Reducer } from "./store";
+import { IApplicationState, reducer } from "./store";
 import { loadViews } from "./ViewLoader";
 
-export const Views =
+export const views =
     loadViews<IApplicationState>()
         .load()
-        .joinToReducer(Reducer.AppReducer);
+        .joinToReducer(reducer.appReducer);

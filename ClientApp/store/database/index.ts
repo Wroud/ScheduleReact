@@ -1,7 +1,7 @@
 ﻿export { IFaculty } from "./Faculty";
 export { ILecturer } from "./Lecturer";
 export { IDatabaseState, Tables } from "./DatabaseState";
-export { Reducer } from "./reducer";
+export { reducer } from "./reducer";
 export {
     Table,
     openTable,

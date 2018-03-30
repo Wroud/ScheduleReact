@@ -2,17 +2,17 @@ import { createMainReducer } from "@app/middlewares/redux-subreducer";
 import { Store } from "react-redux";
 import { routerReducer } from "react-router-redux";
 import { IApplicationState } from "./ApplicationState";
-import { Reducer as DatabaseReducer } from "./database/reducer";
+import { reducer as DatabaseReducer } from "./database/reducer";
 
-export let AppStore: Store<IApplicationState | undefined>;
+export let appStore: Store<IApplicationState | undefined>;
 
 export const setStore = (store: Store<IApplicationState | undefined>) => {
-    AppStore = store;
+    appStore = store;
 };
 
-const InitalState: Partial<IApplicationState> = {};
+const initalState: Partial<IApplicationState> = {};
 
-export const AppReducer =
-    createMainReducer<IApplicationState>(InitalState)
+export const appReducer =
+    createMainReducer<IApplicationState>(initalState)
         .join(DatabaseReducer)
         .joinReducer("routing", routerReducer);

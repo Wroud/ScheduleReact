@@ -1,10 +1,10 @@
 ﻿import { IApplicationState } from "@app/store";
 import { createView } from "@app/View";
 import { configureReducer } from "./configureReducer";
-import { Navigation } from "./navigation";
+import { navigation } from "./navigation";
 import * as Store from "./Store";
 
-export const Name = "home";
-export const Reducer = configureReducer(Name);
+export const name = "home";
+export const reducer = configureReducer(name);
 
-export default createView(Name, Navigation, Reducer);
+export default createView(name, navigation, reducer);
