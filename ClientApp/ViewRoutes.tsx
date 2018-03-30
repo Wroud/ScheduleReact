@@ -16,9 +16,9 @@ export const mapRoutes = (routes: IViewRoute[]) =>
         const { title, path, exact, component, layout } = route;
         return route.routes ?
             (
-                <Route key={id} {... { path, exact }}>
+                <Route key={`${path}/${exact}`} {... { path, exact }}>
                     {route.layout ? <route.layout>{mapRoutes(route.routes)}</route.layout> : mapRoutes(route.routes)}
                 </Route>
             )
-            : <Route key={id} {... { path, exact, component }} />;
+            : <Route key={`${path}/${exact}`} {... { path, exact, component }} />;
     });
