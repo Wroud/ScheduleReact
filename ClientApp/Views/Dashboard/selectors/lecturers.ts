@@ -1,7 +1,7 @@
 import { IApplicationState } from "@app/store";
 import { ILecturer, SelectFromTable } from "@app/store/database";
 import { createSelector } from "reselect";
-import { LecturersReducer } from "../configureReducer";
+import { LecturersReducer } from "../reducers";
 
 export const getLecturers = (state: IApplicationState) => LecturersReducer.stateSelector(state).lecturers;
 // export const getLecturerForm = (state: IApplicationState) => getLecturers(state).form;

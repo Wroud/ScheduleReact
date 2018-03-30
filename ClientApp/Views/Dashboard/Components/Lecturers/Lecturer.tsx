@@ -3,7 +3,13 @@ import { ILecturer } from "@app/store/database";
 import * as React from "react";
 import { connect } from "react-redux";
 import {
+    ListItem,
+    ListItemGraphic,
+    ListItemMeta,
+    ListItemSecondaryText,
+    ListItemText,
     SimpleListItem,
+
 } from "rmwc/List";
 import * as Actions from "../../actions";
 import { makeGetLecturer } from "../../selectors/lecturers";
@@ -12,14 +18,32 @@ interface IOwnProps {
     id: string;
 }
 
-type Props = ILecturer & typeof Actions.lecturersActionCreators;
+type Props = ILecturer & typeof Actions.lecturersActionCreators.lecturer;
 
-export class Lecturer extends React.Component<Props> {
+export class Lecturer extends React.PureComponent<Props> {
     public render() {
-        const { fullName, firstName, lastName, secondName } = this.props;
+        const { fullName, firstName, lastName, secondName, children } = this.props;
         return (
-            <SimpleListItem graphic="star_border" text={fullName} secondaryText={`${firstName} ${lastName}`} meta="info" />
+            <ListItem>
+                <ListItemGraphic>star_border</ListItemGraphic>
+                <ListItemText>
+                    {fullName}
+                    <ListItemSecondaryText>{`${firstName} ${lastName}`}</ListItemSecondaryText>
+                </ListItemText>
+
+                <span className="mdc-list-item__end-detail">
+                    <i className="material-icons mdc-list-item__meta" onClick={this.handleEdit}>edit</i>
+                    <i className="material-icons mdc-list-item__meta" onClick={this.handleDelete}>delete</i>
+                </span>
+                {children}
+            </ListItem>
         );
+    }
+    private handleEdit = () => {
+        this.props.actions.edit(this.props.id);
+    }
+    private handleDelete = () => {
+        this.props.actions.delete(this.props.id);
     }
 }
 
@@ -31,5 +55,5 @@ const mapStateToProps = (state: IApplicationState, props?: IOwnProps): ILecturer
 
 export default connect(
     mapStateToProps,
-    Actions.lecturersActionsMap,
+    Actions.lecturersActionsMap.lecturer,
 )(Lecturer);

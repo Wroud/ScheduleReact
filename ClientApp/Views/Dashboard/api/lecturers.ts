@@ -1,6 +1,8 @@
 import * as JsonQuery from "@app/middlewares/JsonQuery";
-import { IFaculty } from "@app/store/database";
+import { IFaculty, ILecturer } from "@app/store/database";
 
 export const LecturersApi = {
-    load: () => JsonQuery.Get<IFaculty[]>(`Home/GetLecturers/`, "get"),
+    load: () => JsonQuery.Get<ILecturer[]>(`api/Dashboard/Lecturers/GetLecturers/`, "get"),
+    addOrEdit: (lecturer: ILecturer) => JsonQuery.Send<ILecturer>(`api/Dashboard/Lecturers/AddOrEdit/`, "post", lecturer),
+    delete: (id: string) => JsonQuery.Get<ILecturer>(`api/Dashboard/Lecturers/Delete/${id}`, "post"),
 };

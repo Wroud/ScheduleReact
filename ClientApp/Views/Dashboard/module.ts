@@ -1,6 +1,6 @@
 ﻿import { createView } from "@app/View";
-import { configureReducer } from "./configureReducer";
 import { Navigation } from "./navigation";
+import { configureReducer } from "./reducers";
 import { rootSaga } from "./sagas/sagas";
 
 export const Name = "dashboard";

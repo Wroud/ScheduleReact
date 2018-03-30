@@ -5,4 +5,6 @@
 export {
     ILecturersState,
     InitLecturersState,
+    ILecturerFormState,
+    InitLecturerFormState,
 } from "./Lecturers";

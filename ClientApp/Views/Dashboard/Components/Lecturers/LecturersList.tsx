@@ -4,13 +4,13 @@ import {
     List,
 } from "rmwc/List";
 import * as Actions from "../../actions";
-import { LecturersReducer } from "../../configureReducer";
+import { LecturersReducer } from "../../reducers";
 import { ILecturersState } from "../../Store";
 import Lecturer from "./Lecturer";
 
-type Props = ILecturersState & typeof Actions.lecturersActionCreators;
+type Props = { lecturers: string[] } & typeof Actions.lecturersActionCreators.lecturers;
 
-export class LecturersList extends React.Component<Props> {
+export class LecturersList extends React.PureComponent<Props> {
     public componentWillMount() {
         if (!this.props.lecturers || this.props.lecturers.length === 0) {
             this.props.actions.load();
@@ -24,10 +24,10 @@ export class LecturersList extends React.Component<Props> {
             </List>
         );
     }
-    private renderList = (lecturers: string[]) => lecturers.map((element, id) => (<Lecturer id={element} key={id} />));
+    private renderList = (lecturers: string[]) => lecturers.map((element) => (<Lecturer id={element} key={element} />));
 }
 
 export default connect(
-    LecturersReducer.stateSelector,
-    Actions.lecturersActionsMap,
+    (state) => ({ lecturers: LecturersReducer.stateSelector(state).lecturers }),
+    Actions.lecturersActionsMap.lecturers,
 )(LecturersList);

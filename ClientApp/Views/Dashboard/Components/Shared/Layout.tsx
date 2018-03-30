@@ -13,13 +13,14 @@ export class Layout extends React.Component {
         }
     }
     public render() {
-        return (
-            <div>
-                <NavMenu switchDrawer={this.switchDrawer} />
-                <ToolbarFixedAdjust />
-                <Drawer ref={(ref) => { this.Drawer = ref; }} />
-                <main>{this.props.children}</main>
-            </div>
-        );
+        return [
+            <NavMenu switchDrawer={this.switchDrawer} key={"drawer"} />,
+            (
+                <ToolbarFixedAdjust key={"toolbar"} className={"dashboard"}>
+                    <Drawer ref={(ref) => { this.Drawer = ref; }} />
+                    <main>{this.props.children}</main>
+                </ToolbarFixedAdjust>
+            ),
+        ];
     }
 }

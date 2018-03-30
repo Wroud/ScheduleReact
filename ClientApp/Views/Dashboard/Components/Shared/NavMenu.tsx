@@ -26,13 +26,9 @@ export default class NavMenu extends React.Component<IProps, {}> {
                 <ToolbarRow>
                     <ToolbarSection alignStart={true}>
                         <ToolbarMenuIcon use="menu" onClick={this.props.switchDrawer} />
-                        <ToolbarTitle>Toolbar</ToolbarTitle>
+                        <ToolbarTitle>Dashboard</ToolbarTitle>
                     </ToolbarSection>
-                    <ToolbarSection alignEnd={true}>
-                        <TabList />
-                        <ToolbarIcon use="save" />
-                        <ToolbarIcon use="print" />
-                    </ToolbarSection>
+                    <ToolbarSection alignEnd={true}><TabList /></ToolbarSection>
                 </ToolbarRow>
             </Toolbar>
         );

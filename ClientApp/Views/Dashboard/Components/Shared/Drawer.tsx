@@ -22,7 +22,7 @@ export default class Counter extends React.PureComponent<IProps, { open: boolean
         super(props);
 
         this.state = {
-            open: props.open || false,
+            open: props.open || true,
         };
     }
     public switchDrawer = () => {
@@ -42,10 +42,7 @@ export default class Counter extends React.PureComponent<IProps, { open: boolean
     }
     public render() {
         return (
-            <Drawer temporary={true} open={this.state.open} onClose={this.closeDrawer} onOpen={this.openDrawer}>
-                <DrawerHeader theme={"primary-bg"}>
-                    DrawerHeader
-                </DrawerHeader>
+            <Drawer persistent={true} open={this.state.open} onClose={this.closeDrawer} onOpen={this.openDrawer}>
                 <DrawerContent>
                     <ListItem>
                         <ListItemGraphic>star_border</ListItemGraphic>

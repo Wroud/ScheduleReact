@@ -1,3 +1,3 @@
 ﻿export { default as Home } from "./Home";
-export { Layout } from "./Layout";
+export { Layout } from "./Shared/Layout";
 export { default as Lecturers } from "./Lecturers/Lecturers";

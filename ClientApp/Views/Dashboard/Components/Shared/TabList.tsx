@@ -15,7 +15,7 @@ import {
     TabIconText,
 } from "rmwc/Tabs";
 
-import Module from "../module";
+import Module from "../../module";
 
 interface IMenuLink {
     key: number;
@@ -28,7 +28,7 @@ interface IMenuLink {
 
 type Props = RouteComponentProps<{}>;
 
-class TabList extends React.Component<Props, {}> {
+class TabList extends React.PureComponent<Props, {}> {
     public links: IMenuLink[];
 
     constructor(props: Props) {
@@ -58,8 +58,8 @@ class TabList extends React.Component<Props, {}> {
     }
 
     private getElements = () =>
-        this.links.map(({ title }, index) => (
-            <Tab theme={"primary"} key={index}>{title}</Tab>
+        this.links.map(({ title, url }, index) => (
+            <Tab theme={"primary"} key={title} wrap={true}><Link to={url}>{title}</Link></Tab>
         ))
 
     private getActive = () => {
@@ -75,4 +75,4 @@ class TabList extends React.Component<Props, {}> {
     }
 }
 
-export default withRouter<{}>(TabList as any);
+export default withRouter<{}>(TabList);
