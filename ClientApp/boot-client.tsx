@@ -8,6 +8,7 @@ import { ConnectedRouter } from "react-router-redux";
 import sagaMiddlewareFactory from "redux-saga";
 import configureStore from "./configureStore";
 import * as ViewsModule from "./loadViews";
+import "./styles/style.scss";
 
 const baseUrl = document.getElementsByTagName("base")[0].getAttribute("href")!;
 const history = createBrowserHistory({ basename: baseUrl });

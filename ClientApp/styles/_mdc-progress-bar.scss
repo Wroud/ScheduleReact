@@ -1,0 +1,10 @@
+.progress--box {
+    position: relative;
+    .mdc-linear-progress {
+        position: absolute;
+        opacity: 0;
+        &.mdc-linear-progress--indeterminate {
+            opacity: 1;
+        }
+    }
+}
