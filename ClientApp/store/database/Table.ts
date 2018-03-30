@@ -25,6 +25,15 @@ export class Table<T extends Tables> {
         return this.denormalizer(id);
     }
 
+    public getAllIds = (): string[] => {
+        const state = AppStore.getState(); // <====
+        if (state && state.database) {
+            const table = this.stateSelector(state);
+            return Object.keys(table);
+        }
+        return [];
+    }
+
     public add = (data: T[]): string[] => {
         const normalizedData = this.normalizer(data);
         AppStore.dispatch(ActionsCreators.update(normalizedData.entities)); // <====
@@ -32,7 +41,7 @@ export class Table<T extends Tables> {
     }
 
     public remove = (id: string) => {
-        AppStore.dispatch(TableActionsCreators.update({ [id]: "__delete__" as any })); // <====
+        AppStore.dispatch(TableActionsCreators[this.name].update({ [id]: "__delete__" as any })); // <====
     }
 
     public update = (data: T[]) => {

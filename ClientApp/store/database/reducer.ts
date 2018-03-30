@@ -6,10 +6,10 @@ import { FacultyTableName, IFaculty } from "./Faculty";
 import { ILecturer, LecturerTableName } from "./Lecturer";
 
 const FacultyReducer = createSubReducer<IDatabaseState, ITable<IFaculty>>(FacultyTableName)
-    .on(TableActions.update, (state, data) => data as ITable<IFaculty>);
+    .on(TableActions[FacultyTableName].update, (state, data) => data as ITable<IFaculty>);
 
 const LecturerReducer = createSubReducer<IDatabaseState, ITable<ILecturer>>(LecturerTableName)
-    .on(TableActions.update, (state, data) => data as ITable<ILecturer>);
+    .on(TableActions[LecturerTableName].update, (state, data) => data as ITable<ILecturer>);
 
 export const TableReducers = {
     [FacultyTableName]: FacultyReducer,
