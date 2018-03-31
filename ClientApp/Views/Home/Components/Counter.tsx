@@ -16,15 +16,6 @@ type CounterProps =
 
 class Counter extends React.PureComponent<CounterProps> {
     public render() {
-
-        const fetchTask = fetch(`Home/GetLecturers/`)
-            .then((response) => response.json() as Promise<any>)
-            .then((data) => {
-                console.log(data);
-            });
-
-        addTask(fetchTask); // Ensure server-side prerendering waits for this to complete
-
         return (
             <div>
                 <Typography use="display1" tag={"h1"}>Counter</Typography>

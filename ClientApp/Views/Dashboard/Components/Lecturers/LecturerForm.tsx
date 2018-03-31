@@ -1,4 +1,3 @@
-import { IApplicationState } from "@app/store";
 import * as React from "react";
 import { connect } from "react-redux";
 import { Button, ButtonIcon } from "rmwc/Button";
@@ -7,16 +6,15 @@ import { Select } from "rmwc/Select";
 import { TextField, TextFieldHelperText, TextFieldIcon } from "rmwc/TextField";
 
 import { ILecturer } from "@app/store/database";
-import * as Actions from "../../actions";
-import { lecturerFormReducer } from "../../reducers";
-import { ILecturerFormState } from "../../Store/Lecturers";
+import { actionCreators, actions, actionsMaps } from "../../actions";
+import { getLecturer, getLecturerForm } from "../../selectors";
 
 type Props =
     {
         editingId: string;
         editing: boolean;
     }
-    & typeof Actions.lecturersActionCreators.form;
+    & typeof actionCreators.lecturers.form;
 
 class LecturerForm extends React.Component<Props> {
     private FirstNameField: React.ComponentClass<any>;
@@ -34,7 +32,7 @@ class LecturerForm extends React.Component<Props> {
         this.GenderSelect = FormSelect("gender", "Gender");
     }
 
-    public handleInputChange = (event) => {
+    public handleInputChange = event => {
         const target = event.target;
         const value = target.type === "checkbox" ? target.checked : target.value;
         const name = !target.name ? target.id : target.name;
@@ -82,34 +80,34 @@ class LecturerForm extends React.Component<Props> {
 }
 
 export const FormTextField = (name: string, label: string, ...attr: any[]) => connect(
-    (state) => ({
-            name,
-            id: name,
-            label,
-            value: lecturerFormReducer.stateSelector(state).lecturer[name],
-            ...attr,
-        }),
+    state => ({
+        name,
+        id: name,
+        label,
+        value: getLecturer(state)[name],
+        ...attr,
+    }),
     () => ({}),
 )(TextField);
 
 export const FormSelect = (name: string, label: string, ...attr: any[]) => connect(
-    (state) => ({
+    state => ({
         name,
         id: name,
         label,
-        value: lecturerFormReducer.stateSelector(state).lecturer[name] + "",
+        value: getLecturer(state)[name] + "",
         ...attr,
     }),
     () => ({}),
 )(Select);
 
 export default connect(
-    (state) => {
-        const mapState = lecturerFormReducer.stateSelector(state);
+    state => {
+        const mapState = getLecturerForm(state);
         return {
             editing: mapState.editing,
             editingId: mapState.lecturer.id,
         };
     },
-    Actions.lecturersActionsMap.form,
+    actionsMaps.lecturers.form,
 )(LecturerForm);

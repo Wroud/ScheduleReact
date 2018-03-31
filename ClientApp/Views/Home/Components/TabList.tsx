@@ -67,7 +67,7 @@ class TabList extends React.Component<Props, {}> {
         if (!!this.props.location) {
             pathname = this.props.location.pathname;
         }
-        const match = this.links.find((link) => !!matchPath(pathname, link));
+        const match = this.links.find(link => !!matchPath(pathname, link));
         if (match) {
             return match.key;
         }

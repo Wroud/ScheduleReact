@@ -1,5 +1,5 @@
-import { facultyTableName, IFaculty } from "./Faculty";
-import { ILecturer, lecturerTableName } from "./Lecturer";
+import { facultyTableName, IFaculty } from "./tables/Faculty";
+import { ILecturer, lecturerTableName } from "./tables/Lecturer";
 
 export type Tables = ILecturer | IFaculty;
 

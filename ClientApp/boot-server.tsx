@@ -10,7 +10,7 @@ import sagaMiddlewareFactory from "redux-saga";
 import configureStore from "./configureStore";
 import { views } from "./loadViews";
 
-export default createServerRenderer((params) => {
+export default createServerRenderer(params => {
     return new Promise<RenderResult>((resolve, reject) => {
         const basename = params.baseUrl.substring(0, params.baseUrl.length - 1); // remove trailing slash
         const urlAfterBasename = params.url.substring(basename.length);

@@ -7,14 +7,13 @@ import { Grid, GridCell, GridInner } from "rmwc/Grid";
 import { LinearProgress } from "rmwc/LinearProgress";
 import { Typography } from "rmwc/Typography";
 
-import * as Actions from "../../actions";
-import { lecturersReducer } from "../../reducers";
-import { ILecturersState } from "../../Store";
+import { actionCreators, actions, actionsMaps } from "../../actions";
+import { getLecturerForm, getLecturersState } from "../../selectors";
 import LecturerForm from "./LecturerForm";
 import LecturersList from "./LecturersList";
 
 type LecturersProps =
-    & typeof Actions.lecturersActionCreators.lecturers
+    & typeof actionCreators.lecturers.lecturers
     & RouteComponentProps<any>;
 
 class Lecturers extends React.PureComponent<LecturersProps> {
@@ -48,16 +47,16 @@ class Lecturers extends React.PureComponent<LecturersProps> {
 }
 
 export const ListProgress = connect(
-    (state) => ({ determinate: !lecturersReducer.stateSelector(state).loading }),
+    state => ({ determinate: !getLecturersState(state).loading }),
     () => ({}),
 )(LinearProgress);
 
 export const FormProgress = connect(
-    (state) => ({ determinate: !lecturersReducer.stateSelector(state).form.loading }),
+    state => ({ determinate: !getLecturerForm(state).loading }),
     () => ({}),
 )(LinearProgress);
 
 export default withRouter<RouteComponentProps<any> | undefined>(connect(
     null,
-    Actions.lecturersActionsMap.lecturers,
+    actionsMaps.lecturers.lecturers,
 )(Lecturers as any) as any);

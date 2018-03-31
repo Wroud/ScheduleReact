@@ -17,7 +17,9 @@ export interface IViewLoader<TAppState> {
     load: () => this;
 }
 
-export class ViewLoader<TAppState extends IViewStatePart> implements IViewLoader<TAppState> {
+export class ViewLoader<TAppState extends IViewStatePart>
+    implements IViewLoader<TAppState> {
+
     private _reducer: ISubReducer<TAppState, IViewState>;
     private _views: ({ [key: string]: IView<any, any, any> });
     private _api: ({ [key: string]: any });
@@ -70,13 +72,13 @@ export class ViewLoader<TAppState extends IViewStatePart> implements IViewLoader
 
     public load = () => {
         const routeLoader = require.context("./Views/", true, /^\.\/[^\/]+\/routes.ts$/);
-        routeLoader.keys().forEach((el) => {
+        routeLoader.keys().forEach(el => {
             const routes = mapRoutes(routeLoader<any>(el).routes as IViewRoute[]);
             this._routes.push(routes);
         });
 
         const context = require.context("./Views/", true, /^\.\/[^\/]+\/module.ts$/);
-        context.keys().forEach((el) => {
+        context.keys().forEach(el => {
             const view = context<any>(el).default as View<TAppState, any, any>;
 
             if (!view) {

@@ -30,14 +30,14 @@ export const actions = {
     },
 };
 
-export const actionCreators = {
+export const creators = {
     lecturers: createActions(getCreators(actions.lecturers)),
     lecturer: createActions(getCreators(actions.lecturer)),
     form: createActions(getCreators(actions.form)),
 };
 
-export const actopnsMap = {
-    lecturers: mapActionsToProps(actionCreators.lecturers),
-    lecturer: mapActionsToProps(actionCreators.lecturer),
-    form: mapActionsToProps(actionCreators.form),
+export const maps = {
+    lecturers: mapActionsToProps(creators.lecturers),
+    lecturer: mapActionsToProps(creators.lecturer),
+    form: mapActionsToProps(creators.form),
 };

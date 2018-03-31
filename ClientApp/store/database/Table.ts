@@ -9,16 +9,16 @@ import { schemas } from "./schema";
 export class Table<T extends Tables> {
     private name: string;
     private schema: schema.Entity;
-    private selector: (state: IApplicationState) => ITable<T>;
+    private tableSelector: (state: IApplicationState) => ITable<T>;
 
     constructor(name: keyof IDatabaseState) {
         this.name = name;
-        this.selector = tableReducers[name].stateSelector as any;
+        this.tableSelector = tableReducers[name].stateSelector as any;
         this.schema = schemas[this.name];
     }
 
     get stateSelector() {
-        return this.selector;
+        return this.tableSelector;
     }
 
     public get = (id: string): T | undefined => {
@@ -26,12 +26,11 @@ export class Table<T extends Tables> {
     }
 
     public getAllIds = (): string[] => {
-        const state = appStore.getState(); // <====
-        if (state && state.database) {
+        const result = this.withState(state => {
             const table = this.stateSelector(state);
             return Object.keys(table);
-        }
-        return [];
+        });
+        return result || [];
     }
 
     public add = (data: T[]): string[] => {
@@ -41,7 +40,8 @@ export class Table<T extends Tables> {
     }
 
     public remove = (id: string) => {
-        appStore.dispatch(tableActionsCreators[this.name].update({ [id]: "__delete__" as any })); // <====
+        const deleteId = { [id]: "__delete__" as any };
+        appStore.dispatch(tableActionsCreators[this.name].update(deleteId)); // <====
     }
 
     public update = (data: T[]) => {
@@ -53,10 +53,17 @@ export class Table<T extends Tables> {
     }
 
     private denormalizer = (id: string) => {
-        const state = appStore.getState(); // <====
-        if (state && state.database) {
+        const data = this.withState(state => {
             const table = this.stateSelector(state);
             return denormalize(table[id], this.schema, state.database);
+        });
+        return data;
+    }
+
+    private withState = <TResult>(action: (state: IApplicationState) => TResult): TResult | undefined => {
+        const state = appStore.getState(); // <====
+        if (state && state.database) {
+            return action(state);
         }
     }
 }
@@ -72,5 +79,5 @@ export function SelectFromTable<T extends Tables, P>(table: (database: IDatabase
 }
 
 export function SelectEntries<T extends Tables>(table: (database: IDatabaseState) => ITable<T>, entries: (state: IApplicationState) => string[]) {
-    return (state: IApplicationState) => entries(state).map((entry) => table(state.database)[entry]);
+    return (state: IApplicationState) => entries(state).map(entry => table(state.database)[entry]);
 }

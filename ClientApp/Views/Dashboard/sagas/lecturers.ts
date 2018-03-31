@@ -1,65 +1,65 @@
 import { JsonQueryResult } from "@app/middlewares/JsonQuery";
-import { ILecturer, openTable } from "@app/store/database";
-import { call, put, select } from "redux-saga/effects";
-import { lecturersActionCreators, lecturersActions } from "../actions";
+import { dbContext, ILecturer } from "@app/store/database";
+import { call, put, select, takeEvery } from "redux-saga/effects";
+import { actionCreators, actions } from "../actions";
 import { api } from "../api";
-import { lecturerFormReducer } from "../reducers";
+import { getLecturer } from "../selectors";
+
+export function* lecturersSaga() {
+    yield takeEvery(actions.lecturers.lecturers.load.type, fetchData);
+    yield takeEvery(actions.lecturers.lecturer.delete.type, deleteLecturer);
+    yield takeEvery(actions.lecturers.lecturer.edit.type, editLecturer);
+    yield takeEvery([actions.lecturers.form.add.type, actions.lecturers.form.save.type], submitLecturer);
+}
 
 export function* fetchData(action) {
-    try {
-        const query: JsonQueryResult<ILecturer[]> = yield call(api.lecturers.load);
-        const db = openTable<ILecturer>("lecturers");
-        const result = yield db.add(query.data);
-        yield put(lecturersActionCreators.lecturers.actions.update(result));
-        yield put(lecturersActions.lecturers.setLoaded);
-    } catch (error) {
-        console.log(error);
-        yield put({ type: "FETCH_FAILED", error });
+    const { data, state, errors }: JsonQueryResult<ILecturer[]> = yield call(api.lecturers.load);
+
+    if (state) {
+        const result = yield dbContext.lecturers.add(data);
+        yield put(actionCreators.lecturers.lecturers.actions.update(result));
+    } else {
+        console.log(errors);
+        yield put({ type: "FETCH_FAILED", errors });
     }
+
+    yield put(actions.lecturers.lecturers.setLoaded);
 }
 
 export function* submitLecturer(action) {
-    yield put(lecturersActions.form.setLoading);
-    try {
-        const lecturer: ILecturer = yield select((state) => lecturerFormReducer.stateSelector(state).lecturer);
-        const query: JsonQueryResult<ILecturer> = yield call(api.lecturers.addOrEdit, lecturer);
-        if (query.state) {
-            const db = openTable<ILecturer>("lecturers");
-            const result = yield db.add([query.data]);
-            yield put(lecturersActions.form.reset);
-            yield put(lecturersActionCreators.lecturers.actions.update(db.getAllIds()));
-        }
-    } catch (error) {
-        console.log(error);
-        yield put({ type: "FETCH_FAILED", error });
+    yield put(actions.lecturers.form.setLoading);
+    const lecturer: ILecturer = yield select(getLecturer);
+    const { data, state, errors }: JsonQueryResult<ILecturer> = yield call(api.lecturers.addOrEdit, lecturer);
+
+    if (state) {
+        const result = yield dbContext.lecturers.add([data]);
+        yield put(actions.lecturers.form.reset);
+        yield put(actionCreators.lecturers.lecturers.actions.update(dbContext.lecturers.getAllIds()));
+    } else {
+        console.log(errors);
+        yield put({ type: "FETCH_FAILED", errors });
     }
-    yield put(lecturersActions.form.setLoaded);
+
+    yield put(actions.lecturers.form.setLoaded);
 }
 
-export function* deleteLecturer(action: typeof lecturersActions.lecturer.delete) {
-    yield put(lecturersActions.lecturers.setLoading);
-    try {
-        const id = action.payload;
-        const query: JsonQueryResult<ILecturer> = yield call(api.lecturers.delete, id);
-        if (query.state) {
-            const db = openTable<ILecturer>("lecturers");
-            db.remove(id);
-            yield put(lecturersActionCreators.lecturers.actions.update(db.getAllIds()));
-        }
-    } catch (error) {
-        console.log(error);
-        yield put({ type: "FETCH_FAILED", error });
+export function* deleteLecturer(action: typeof actions.lecturers.lecturer.delete) {
+    yield put(actions.lecturers.lecturers.setLoading);
+    const id = action.payload;
+    const { data, state, errors }: JsonQueryResult<ILecturer> = yield call(api.lecturers.delete, id);
+
+    if (state) {
+        dbContext.lecturers.remove(id);
+        yield put(actionCreators.lecturers.lecturers.actions.update(dbContext.lecturers.getAllIds()));
+    } else {
+        console.log(errors);
+        yield put({ type: "FETCH_FAILED", errors });
     }
-    yield put(lecturersActions.lecturers.setLoaded);
+
+    yield put(actions.lecturers.lecturers.setLoaded);
 }
 
-export function* editLecturer(action: typeof lecturersActions.lecturer.edit) {
-    try {
-        const db = openTable<ILecturer>("lecturers");
-        const lecturer = yield db.get(action.payload);
-        yield put(lecturersActionCreators.form.actions.update({ ...lecturer }));
-    } catch (error) {
-        console.log(error);
-        yield put({ type: "FETCH_FAILED", error });
-    }
+export function* editLecturer(action: typeof actions.lecturers.lecturer.edit) {
+    const lecturer = yield dbContext.lecturers.get(action.payload);
+    yield put(actionCreators.lecturers.form.actions.update({ ...lecturer }));
 }

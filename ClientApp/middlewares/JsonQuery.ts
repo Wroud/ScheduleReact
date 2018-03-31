@@ -56,9 +56,9 @@ export class HandlersContainer {
     }
     public handle(errors: IErrorMessage[]) {
         this.reset();
-        errors.forEach((error) => {
+        errors.forEach(error => {
             console.log(error.name);
-            this.Handlers.filter((handler) => handler.key === error.name.toLowerCase()).forEach((handler) => {
+            this.Handlers.filter(handler => handler.key === error.name.toLowerCase()).forEach(handler => {
                 handler.handler(error.message);
             });
         });
@@ -74,8 +74,8 @@ export class HandlersSubscriber {
         if (handler) {
             handler();
             this.Errors
-                .filter((error) => key.toLowerCase() === error.name.toLowerCase())
-                .forEach((error) => {
+                .filter(error => key.toLowerCase() === error.name.toLowerCase())
+                .forEach(error => {
                     console.log(error.name);
                     handler(error.message);
                 });
@@ -116,7 +116,7 @@ function failResult<T>(exception: any): IJsonResult<T> {
 
 export async function Get<T>(url: string, method: RequestType = "post", opt?: IOptions<T>, data?: any) {
     try {
-        const fetchTask = fetch(url, { method }).then((response) => response.json() as Promise<IJsonResult<T>>);
+        const fetchTask = fetch(url, { method }).then(response => response.json() as Promise<IJsonResult<T>>);
         addTask(fetchTask);
         return new JsonQueryResult<T>(await fetchTask);
     } catch (e) {
@@ -135,7 +135,7 @@ export async function Send<T>(url: string, method: RequestType = "get", data: an
         }
     }
     try {
-        const fetchTask = fetch(url, { method, body: formData }).then((response) => response.json() as Promise<IJsonResult<T>>);
+        const fetchTask = fetch(url, { method, body: formData }).then(response => response.json() as Promise<IJsonResult<T>>);
         addTask(fetchTask);
         return new JsonQueryResult<T>(await fetchTask);
     } catch (e) {

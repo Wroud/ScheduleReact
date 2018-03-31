@@ -12,7 +12,9 @@ export interface IViewStatePart {
     view: IViewState;
 }
 
-export interface IView<TAppState extends IViewStatePart, TReducerState, TApi> {
+export interface IView<TAppState
+    extends IViewStatePart, TReducerState, TApi> {
+
     name: string;
     loader: ViewLoader<TAppState>;
     sagas?: () => SagaIterator;
@@ -20,7 +22,9 @@ export interface IView<TAppState extends IViewStatePart, TReducerState, TApi> {
     reducer?: ISubReducer<TAppState, TReducerState>;
 }
 
-export class View<TAppState extends IViewStatePart, TReducerState, TApi> implements IView<TAppState, TReducerState, TApi> {
+export class View<TAppState extends IViewStatePart, TReducerState, TApi>
+    implements IView<TAppState, TReducerState, TApi> {
+
     public loader: ViewLoader<TAppState>;
     // tslint:disable-next-line:variable-name
     private _name: string;
@@ -33,7 +37,13 @@ export class View<TAppState extends IViewStatePart, TReducerState, TApi> impleme
     // tslint:disable-next-line:variable-name
     private _api?: TApi;
 
-    constructor(name: string, navigation?: INavigationMember[], reducer?: ISubReducer<TAppState, TReducerState>, sagas?: () => SagaIterator, api?: TApi) {
+    constructor(
+        name: string,
+        navigation?: INavigationMember[],
+        reducer?: ISubReducer<TAppState, TReducerState>,
+        sagas?: () => SagaIterator,
+        api?: TApi) {
+
         this._name = name;
         this._navigation = navigation;
         this._reducer = reducer;

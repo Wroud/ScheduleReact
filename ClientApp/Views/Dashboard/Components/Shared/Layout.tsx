@@ -17,7 +17,7 @@ export class Layout extends React.Component {
             <NavMenu switchDrawer={this.switchDrawer} key={"drawer"} />,
             (
                 <ToolbarFixedAdjust key={"toolbar"} className={"dashboard"}>
-                    <Drawer ref={(ref) => { this.Drawer = ref; }} />
+                    <Drawer ref={ref => { this.Drawer = ref; }} />
                     <main>{this.props.children}</main>
                 </ToolbarFixedAdjust>
             ),

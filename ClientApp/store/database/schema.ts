@@ -1,6 +1,6 @@
 ﻿import { schema } from "normalizr";
-import { facultyTableName } from "./Faculty";
-import { lecturerTableName } from "./Lecturer";
+import { facultyTableName } from "./tables/Faculty";
+import { lecturerTableName } from "./tables/Lecturer";
 
 // schema definitions
 const lecturer = new schema.Entity(lecturerTableName);
@@ -9,6 +9,6 @@ const faculty = new schema.Entity(facultyTableName, {
 });
 
 export const schemas = {
-    lecturers: [lecturer],
-    faculties: [faculty],
+    [lecturerTableName]: [lecturer],
+    [facultyTableName]: [faculty],
 };

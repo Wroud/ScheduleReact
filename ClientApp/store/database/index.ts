@@ -1,5 +1,5 @@
-﻿export { IFaculty } from "./Faculty";
-export { ILecturer } from "./Lecturer";
+﻿export { IFaculty } from "./tables/Faculty";
+export { ILecturer } from "./tables/Lecturer";
 export { IDatabaseState, Tables } from "./DatabaseState";
 export { reducer } from "./reducer";
 export {
@@ -9,3 +9,4 @@ export {
     SelectFromTable,
     SelectEntries,
 } from "./Table";
+export { dbContext } from "./dbContext";

@@ -29,7 +29,6 @@ const MainReducerName = "MainReducer";
 export class SubReducer<TState, TReducerState>
     implements ISubReducer<TState, TReducerState> {
 
-    // tslint:disable-next-line:variable-name
     protected _name: string;
     private initState: Partial<TReducerState>;
     private actionReducerList: IActionReducerList<TReducerState>;
@@ -51,7 +50,7 @@ export class SubReducer<TState, TReducerState>
         return `${this.parent.path}.${this._name}`;
     }
 
-    public stateSelector = (state) => this.parent.stateSelector(state)[this._name];
+    public stateSelector = state => this.parent.stateSelector(state)[this._name];
 
     public setLinkToParent = <TR>(reducer: ISubReducer<TState, TR>) => {
         this.parent = reducer;
@@ -64,7 +63,7 @@ export class SubReducer<TState, TReducerState>
             nextState = { ...this.initState as any };
         }
 
-        this.reducers.forEach((reducer) => {
+        this.reducers.forEach(reducer => {
             nextState[reducer.name] = reducer.reducer(nextState[reducer.name], action);
         });
 
@@ -77,12 +76,12 @@ export class SubReducer<TState, TReducerState>
         }
 
         const { type, payload } = action as IExtendAction<any>;
-        const nextActionState = this.actionReducerList[type](nextState, payload || {});
-        this.deepExtend(nextState, nextActionState);
+        const diff = this.actionReducerList[type](nextState, payload || {});
+        this.deepExtend(nextState, diff);
 
         console.log("Reducer: ", this.path);
         this.logActionInfo(action);
-        console.log("State / Next state / Diff: ", state, nextState, nextActionState);
+        console.log("State / Next state / Diff: ", state, nextState, diff);
         console.log("---");
 
         return nextState;
@@ -94,14 +93,14 @@ export class SubReducer<TState, TReducerState>
     }
 
     public join = <T extends TReducerState[keyof TReducerState]>(reducer: ISubReducer<TState, T>) => {
-        this.reducers = this.reducers.filter((el) => el.name !== reducer.name);
+        this.reducers = this.reducers.filter(el => el.name !== reducer.name);
         reducer.setLinkToParent(this as any);
         this.reducers.push(reducer);
         return this;
     }
 
     public joinReducer = <T extends TReducerState[keyof TReducerState]>(name: keyof TReducerState, reducer: (state: T, action: any) => T) => {
-        this.reducers = this.reducers.filter((el) => el.name !== name);
+        this.reducers = this.reducers.filter(el => el.name !== name);
         this.reducers.push({ name, reducer });
         return this;
     }
@@ -152,7 +151,7 @@ export class MainReducer<TState>
         return this._name;
     }
 
-    public stateSelector = (state) => state;
+    public stateSelector = state => state;
 }
 
 export function createMainReducer<TState>(initState?: Partial<TState>): ISubReducer<TState, TState> {

@@ -5,7 +5,7 @@ export const actions = {
     decrement: createAction("Decrement", "Dashboard/Home"),
 };
 
-export const actionCreators = {
+export const creators = {
     increment: getActionCreator(actions.increment),
     decrement: getActionCreator(actions.decrement),
 };

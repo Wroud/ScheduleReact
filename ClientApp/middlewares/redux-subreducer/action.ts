@@ -58,10 +58,9 @@ export function createPayloadAction<TData>(description?: string, from?: string) 
 export const getActionMeta = ({ type }: IExtendAction<any>): IActionMeta => createdActions[type] || {};
 export const getCreators = <T extends IActionsClass>(actions: T): TransformActionsClass<T> => {
     const result: TransformActionsClass<T> = {} as any;
-    // tslint:disable-next-line:forin
-    for (const action in actions) {
+    Object.keys(actions).forEach(action => {
         result[action] = (payload?: any) => ({ ...actions[action] as any, payload });
-    }
+    });
     return result;
 };
 export const getActionCreator = (action: Action) => () => action;
