@@ -53,6 +53,7 @@ class LecturerFormClass extends React.Component<Props, IState> {
         this.props.actions.reset();
     }
     handleSubmit = () => {
+        console.log(12);
         if (this.props.editing) {
             this.props.actions.save();
         } else {

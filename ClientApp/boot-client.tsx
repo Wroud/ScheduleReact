@@ -19,7 +19,7 @@ const initialState = (window as any).initialReduxState;
 const store = configureStore(history, initialState, sagaMiddleware);
 
 let appViews = ViewsModule.views;
-sagaMiddleware.run(appViews.sagas);
+let sagaTask = sagaMiddleware.run(appViews.sagas);
 
 function renderApp() {
     ReactDOM.hydrate(
@@ -37,7 +37,8 @@ renderApp();
 if (module.hot) {
     module.hot.accept("./loadViews", () => {
         appViews = require<typeof ViewsModule>("./loadViews").views;
-        sagaMiddleware.run(appViews.sagas);
+        sagaTask.cancel();
+        sagaTask = sagaMiddleware.run(appViews.sagas);
         renderApp();
     });
 }
