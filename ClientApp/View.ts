@@ -25,7 +25,7 @@ export interface IView<TAppState
 export class View<TAppState extends IViewStatePart, TReducerState, TApi>
     implements IView<TAppState, TReducerState, TApi> {
 
-    public loader: ViewLoader<TAppState>;
+    loader: ViewLoader<TAppState>;
     // tslint:disable-next-line:variable-name
     private _name: string;
     // tslint:disable-next-line:variable-name
@@ -72,7 +72,7 @@ export class View<TAppState extends IViewStatePart, TReducerState, TApi>
         return this._sagas;
     }
 
-    public stateSelector = (state: TAppState): TReducerState => {
+    stateSelector = (state: TAppState): TReducerState => {
         if (!this.reducer) {
             throw new Error("stateSelector reducer is undefined");
             // return {} as any;
@@ -80,7 +80,7 @@ export class View<TAppState extends IViewStatePart, TReducerState, TApi>
         return this.reducer.stateSelector(state) as TReducerState;
     }
 
-    public Api = (api: any): TApi => api[`${this.name}Api`];
+    Api = (api: any): TApi => api[`${this.name}Api`];
 }
 
 export const createView = <TReducerState extends TReducerStateModifed, TAppState extends IViewStatePart, TReducerStateModifed, TApi= {}>(name: string, navigation?: INavigationMember[], reducer?: ISubReducer<TAppState, TReducerState>, sagas?: () => SagaIterator, api?: TApi) => new View<TAppState, TReducerState, TApi>(name, navigation, reducer, sagas, api);

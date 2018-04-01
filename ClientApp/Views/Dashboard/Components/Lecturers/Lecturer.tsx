@@ -21,7 +21,7 @@ interface IOwnProps {
 type Props = ILecturer & typeof actionCreators.lecturers.lecturer;
 
 export class Lecturer extends React.PureComponent<Props> {
-    public render() {
+    render() {
         const { fullName, firstName, lastName, secondName, children } = this.props;
         return (
             <ListItem>

@@ -6,18 +6,18 @@ import Drawer from "./Drawer";
 import NavMenu from "./NavMenu";
 
 export class Layout extends React.Component {
-    public Drawer?: Drawer | null;
-    public switchDrawer = () => {
+    Drawer?: Drawer | null;
+    switchDrawer = () => {
         if (!!this.Drawer) {
             this.Drawer.switchDrawer();
         }
     }
-    public render() {
+    render() {
         return (
             <div>
                 <NavMenu switchDrawer={this.switchDrawer} />
                 <ToolbarFixedAdjust />
-                <Drawer ref={(ref) => { this.Drawer = ref; }} />
+                <Drawer ref={ref => { this.Drawer = ref; }} />
                 <main>{this.props.children}</main>
             </div>
         );

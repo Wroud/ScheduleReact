@@ -29,7 +29,7 @@ interface IMenuLink {
 type Props = RouteComponentProps<{}>;
 
 class TabList extends React.Component<Props, {}> {
-    public links: IMenuLink[];
+    links: IMenuLink[];
 
     constructor(props: Props) {
         super(props);
@@ -44,12 +44,12 @@ class TabList extends React.Component<Props, {}> {
 
     }
 
-    public onChange = ({ target: { value } }: any) => {
+    onChange = ({ target: { value } }: any) => {
         const { url } = this.links[value];
         this.props.history.push(url);
     }
 
-    public render() {
+    render() {
         return (
             <TabBar activeTabIndex={this.getActive()} onChange={this.onChange}>
                 {this.getElements()}

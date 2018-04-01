@@ -15,7 +15,7 @@ type CounterProps =
     & (RouteComponentProps<any> | undefined);
 
 class Counter extends React.PureComponent<CounterProps> {
-    public render() {
+    render() {
         return (
             <div>
                 <Typography use="display1" tag={"h1"}>Counter</Typography>

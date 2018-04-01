@@ -25,8 +25,8 @@ export interface IOptions<T> {
 type RequestType = "post" | "get" | "delete";
 
 export class ErrorHandler {
-    public key: string;
-    public handler: IHandlerFunc;
+    key: string;
+    handler: IHandlerFunc;
     constructor(key: string, handler: IHandlerFunc) {
         this.key = key;
         this.handler = handler;
@@ -34,27 +34,27 @@ export class ErrorHandler {
 }
 
 export class HandlersContainer {
-    public Handlers: ErrorHandler[];
+    Handlers: ErrorHandler[];
     constructor() {
         this.Handlers = [];
         this.addFor = this.addFor.bind(this);
         this.handle = this.handle.bind(this);
         this.reset = this.reset.bind(this);
     }
-    public addFor(key: string, handler: IHandlerFunc | null) {
+    addFor(key: string, handler: IHandlerFunc | null) {
         if (handler) {
             this.Handlers.push(new ErrorHandler(key.toLowerCase(), handler));
         }
         return this;
     }
-    public reset() {
+    reset() {
         for (const key in this.Handlers) {
             if (this.Handlers.hasOwnProperty(key)) {
                 this.Handlers[key].handler();
             }
         }
     }
-    public handle(errors: IErrorMessage[]) {
+    handle(errors: IErrorMessage[]) {
         this.reset();
         errors.forEach(error => {
             console.log(error.name);
@@ -66,11 +66,11 @@ export class HandlersContainer {
 }
 
 export class HandlersSubscriber {
-    public Errors: IErrorMessage[];
+    Errors: IErrorMessage[];
     constructor(errors: IErrorMessage[]) {
         this.Errors = errors;
     }
-    public for(key: string, handler: IHandlerFunc | null) {
+    for(key: string, handler: IHandlerFunc | null) {
         if (handler) {
             handler();
             this.Errors
@@ -95,7 +95,7 @@ export class JsonQueryResult<T> {
     get data() { return this.response.data; }
     get errors() { return this.response.errors; }
 
-    public handleErrors(handler: HandlersContainer) {
+    handleErrors(handler: HandlersContainer) {
         handler.handle(this.errors);
     }
 }

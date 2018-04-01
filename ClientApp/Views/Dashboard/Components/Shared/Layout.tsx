@@ -6,13 +6,13 @@ import Drawer from "./Drawer";
 import NavMenu from "./NavMenu";
 
 export class Layout extends React.Component {
-    public Drawer?: Drawer | null;
-    public switchDrawer = () => {
+    Drawer?: Drawer | null;
+    switchDrawer = () => {
         if (!!this.Drawer) {
             this.Drawer.switchDrawer();
         }
     }
-    public render() {
+    render() {
         return [
             <NavMenu switchDrawer={this.switchDrawer} key={"drawer"} />,
             (

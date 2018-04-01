@@ -9,7 +9,7 @@ import { Typography } from "rmwc/Typography";
 
 import { actionCreators, actions, actionsMaps } from "../../actions";
 import { getLecturerForm, getLecturersState } from "../../selectors";
-import LecturerForm from "./LecturerForm";
+import { LecturerForm } from "./LecturerForm";
 import LecturersList from "./LecturersList";
 
 type LecturersProps =
@@ -17,7 +17,7 @@ type LecturersProps =
     & RouteComponentProps<any>;
 
 class Lecturers extends React.PureComponent<LecturersProps> {
-    public render() {
+    render() {
         return (
             <Grid>
                 <GridCell span={12}>

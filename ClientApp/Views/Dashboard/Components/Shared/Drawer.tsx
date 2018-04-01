@@ -25,22 +25,22 @@ export default class Counter extends React.PureComponent<IProps, { open: boolean
             open: props.open || true,
         };
     }
-    public switchDrawer = () => {
+    switchDrawer = () => {
         this.setState({
             open: !this.state.open,
         });
     }
-    public closeDrawer = () => {
+    closeDrawer = () => {
         this.setState({
             open: false,
         });
     }
-    public openDrawer = () => {
+    openDrawer = () => {
         this.setState({
             open: true,
         });
     }
-    public render() {
+    render() {
         return (
             <Drawer persistent={true} open={this.state.open} onClose={this.closeDrawer} onOpen={this.openDrawer}>
                 <DrawerContent>

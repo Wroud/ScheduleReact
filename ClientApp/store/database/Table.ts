@@ -21,11 +21,11 @@ export class Table<T extends Tables> {
         return this.tableSelector;
     }
 
-    public get = (id: string): T | undefined => {
+    get = (id: string): T | undefined => {
         return this.denormalizer(id);
     }
 
-    public getAllIds = (): string[] => {
+    getAllIds = (): string[] => {
         const result = this.withState(state => {
             const table = this.stateSelector(state);
             return Object.keys(table);
@@ -33,18 +33,18 @@ export class Table<T extends Tables> {
         return result || [];
     }
 
-    public add = (data: T[]): string[] => {
+    add = (data: T[]): string[] => {
         const normalizedData = this.normalizer(data);
         appStore.dispatch(actionsCreators.update(normalizedData.entities)); // <====
         return normalizedData.result;
     }
 
-    public remove = (id: string) => {
+    remove = (id: string) => {
         const deleteId = { [id]: "__delete__" as any };
         appStore.dispatch(tableActionsCreators[this.name].update(deleteId)); // <====
     }
 
-    public update = (data: T[]) => {
+    update = (data: T[]) => {
         return this.add(data);
     }
 

@@ -2,7 +2,7 @@
 import { RouteComponentProps } from "react-router-dom";
 
 export default class Home extends React.PureComponent<RouteComponentProps<any> | undefined> {
-    public render() {
+    render() {
         return (
             <div>
                 <h1>Hello, world!</h1>

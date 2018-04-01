@@ -20,7 +20,7 @@ export default class NavMenu extends React.Component<IProps, {}> {
         super(props);
     }
 
-    public render() {
+    render() {
         return (
             <Toolbar fixed={true}>
                 <ToolbarRow>

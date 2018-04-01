@@ -19,7 +19,6 @@ export default createServerRenderer(params => {
 
         const store = configureStore(createMemoryHistory(), undefined, sagaMiddleware);
         sagaMiddleware.run(views.sagas);
-        // console.log(Views);
         store.dispatch(replace(urlAfterBasename));
 
         const routerContext: any = {};

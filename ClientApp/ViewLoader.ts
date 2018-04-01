@@ -52,7 +52,7 @@ export class ViewLoader<TAppState extends IViewStatePart>
         return this._routes;
     }
 
-    public *sagas() {
+    *sagas() {
         for (const saga of this._sagas) {
             for (const effect of saga()) {
                 yield effect;
@@ -60,17 +60,17 @@ export class ViewLoader<TAppState extends IViewStatePart>
         }
     }
 
-    public joinToReducer = (reducer: ISubReducer<TAppState, any>) => {
+    joinToReducer = (reducer: ISubReducer<TAppState, any>) => {
         reducer.join(this._reducer);
         return this;
     }
 
-    public getView = (view: string) => {
+    getView = (view: string) => {
         console.log(this);
         return this._views[view];
     }
 
-    public load = () => {
+    load = () => {
         const routeLoader = require.context("./Views/", true, /^\.\/[^\/]+\/routes.ts$/);
         routeLoader.keys().forEach(el => {
             const routes = mapRoutes(routeLoader<any>(el).routes as IViewRoute[]);

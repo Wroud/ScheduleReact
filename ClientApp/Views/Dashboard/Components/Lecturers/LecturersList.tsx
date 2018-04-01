@@ -12,12 +12,12 @@ import Lecturer from "./Lecturer";
 type Props = { lecturers: string[] } & typeof actionCreators.lecturers.lecturers;
 
 export class LecturersList extends React.PureComponent<Props> {
-    public componentWillMount() {
+    componentWillMount() {
         if (!this.props.lecturers || this.props.lecturers.length === 0) {
             this.props.actions.load();
         }
     }
-    public render() {
+    render() {
         const { lecturers } = this.props;
         return (
             <List twoLine={true}>
