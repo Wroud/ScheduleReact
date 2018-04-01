@@ -9,6 +9,7 @@ export interface IExtendAction<TData = {}>
     extends Action {
 
     payload?: TData;
+    componentId?: string;
 }
 
 export interface IPayloadAction<TData>
@@ -38,20 +39,18 @@ const createdActions: { [key: string]: IActionMeta } = {};
 
 export function createAction(description?: string, from?: string) {
     const action: IExtendAction<{}> = {
-        type: `GENERIC_ACTION_${id}`,
+        type: `GENERIC_ACTION_${id++}`,
     };
     createdActions[action.type] = { action, description, from };
-    id++;
     return action;
 }
 
 export function createPayloadAction<TData>(description?: string, from?: string) {
     const action: IPayloadAction<TData> = {
-        type: `GENERIC_ACTION_${id}`,
+        type: `GENERIC_ACTION_${id++}`,
         payload: {} as any,
     };
     createdActions[action.type] = { action, description, from };
-    id++;
     return action;
 }
 

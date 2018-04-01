@@ -18,3 +18,11 @@ export {
     createMainReducer,
     createSubReducer,
 } from "./reducer";
+export {
+    ILocalReducer,
+    LocalReducer,
+    LocalListener,
+    connectState,
+    connectWithComponentId,
+    IComponentId,
+} from "./localReducer";

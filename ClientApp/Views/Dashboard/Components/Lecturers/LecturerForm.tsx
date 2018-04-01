@@ -5,9 +5,15 @@ import { FormField } from "rmwc/FormField";
 import { Select } from "rmwc/Select";
 import { TextField, TextFieldHelperText, TextFieldIcon } from "rmwc/TextField";
 
+import { connectState, connectWithComponentId, IComponentId, ILocalReducer } from "@app/middlewares/redux-subreducer";
 import { ILecturer } from "@app/store/database";
+import { compose } from "redux";
 import { actionCreators, actions, actionsMaps } from "../../actions";
 import { getLecturer, getLecturerForm } from "../../selectors";
+
+interface IState {
+    errors: string;
+}
 
 type Props =
     {
@@ -16,15 +22,16 @@ type Props =
     }
     & typeof actionCreators.lecturers.form;
 
-class LecturerForm extends React.Component<Props> {
+class LecturerFormClass extends React.Component<Props, IState> {
     private FirstNameField: React.ComponentClass<any>;
     private LastNameField: React.ComponentClass<any>;
     private SecondNameField: React.ComponentClass<any>;
     private FullNameField: React.ComponentClass<any>;
     private GenderSelect: React.ComponentClass<any>;
 
-    public constructor(props: Props) {
+    constructor(props: Props) {
         super(props);
+
         this.FirstNameField = FormTextField("firstName", "Fist Name");
         this.LastNameField = FormTextField("lastName", "Last Name");
         this.SecondNameField = FormTextField("secondName", "Second Name");
@@ -32,7 +39,7 @@ class LecturerForm extends React.Component<Props> {
         this.GenderSelect = FormSelect("gender", "Gender");
     }
 
-    public handleInputChange = event => {
+    handleInputChange = event => {
         const target = event.target;
         const value = target.type === "checkbox" ? target.checked : target.value;
         const name = !target.name ? target.id : target.name;
@@ -42,17 +49,17 @@ class LecturerForm extends React.Component<Props> {
             [name]: value,
         } as ILecturer);
     }
-    public handleReset = () => {
+    handleReset = () => {
         this.props.actions.reset();
     }
-    public handleSubmit = () => {
+    handleSubmit = () => {
         if (this.props.editing) {
             this.props.actions.save();
         } else {
             this.props.actions.add();
         }
     }
-    public render() {
+    render() {
         const { editingId, editing } = this.props;
         const attr = { required: true, dense: true };
         const selectOptions = [{ value: "0", label: "Мужчина" }, { value: "1", label: "Женщина" }];
@@ -101,13 +108,35 @@ export const FormSelect = (name: string, label: string, ...attr: any[]) => conne
     () => ({}),
 )(Select);
 
-export default connect(
-    state => {
-        const mapState = getLecturerForm(state);
-        return {
-            editing: mapState.editing,
-            editingId: mapState.lecturer.id,
-        };
-    },
-    actionsMaps.lecturers.form,
-)(LecturerForm);
+const mapStateToProps = state => {
+    const mapState = getLecturerForm(state);
+    return {
+        editing: mapState.editing,
+        editingId: mapState.lecturer.id,
+    };
+};
+
+const mapErrors = (props, prevState, errors) => ({ errors });
+
+const stateReducer = (reducer: ILocalReducer<Props & IComponentId, IState>) => reducer
+    .on(actions.lecturers.lecturer.edit, mapErrors)
+    .onOwn(actions.lecturers.lecturer.edit, mapErrors)
+    .onId("component-id", actions.lecturers.lecturer.edit, mapErrors);
+
+const initState = {
+    errors: "",
+};
+
+const enhance = compose<React.ComponentClass>(
+    connectState<Props, IState>(
+        initState,
+        stateReducer,
+        "component-id",
+    ),
+    connectWithComponentId(
+        mapStateToProps,
+        actionsMaps.lecturers.form,
+    ),
+);
+
+export const LecturerForm = enhance(LecturerFormClass);

@@ -1,4 +1,4 @@
-import { createMainReducer } from "@app/middlewares/redux-subreducer";
+import { createMainReducer, LocalListener } from "@app/middlewares/redux-subreducer";
 import { Store } from "react-redux";
 import { routerReducer } from "react-router-redux";
 import { IApplicationState } from "./ApplicationState";
@@ -15,4 +15,5 @@ const initalState: Partial<IApplicationState> = {};
 export const appReducer =
     createMainReducer<IApplicationState>(initalState)
         .join(DatabaseReducer)
-        .joinReducer("routing", routerReducer);
+        .joinReducer("routing", routerReducer)
+        .joinListener("listener", LocalListener);
