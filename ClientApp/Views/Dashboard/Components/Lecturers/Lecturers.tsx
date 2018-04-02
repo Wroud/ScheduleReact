@@ -29,7 +29,7 @@ class Lecturers extends React.PureComponent<LecturersProps> {
                 <GridCell span={12}>
                     <GridInner>
                         <GridCell span={12}>
-                            <Button raised={true} onClick={this.props.actions.load}>Reload</Button>
+                            <Button raised={true} onClick={this.props.actions.requestLoad}>Reload</Button>
                         </GridCell>
                         <GridCell span={4} className={"progress--box mdc-layout-grid__cell--align-top"}>
                             <FormProgress />

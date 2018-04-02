@@ -11,19 +11,19 @@ export const { actions, creators, mapDispatch, mapCreators } = prepareActions({
     lecturers: {
         setLoading: createAction("Lecturers loading...", from),
         setLoaded: createAction("Lecturers loaded", from),
-        load: createAction("Loading Lecturers", from),
-        update: createPayloadAction<string[]>("Update Lecturers", from),
+        requestLoad: createAction("Loading Lecturers", from),
+        setLecturers: createPayloadAction<string[]>("set lecturers[]", from),
     },
     lecturer: {
         edit: createPayloadAction<string>("Edit Lecturer", from),
-        delete: createPayloadAction<string>("Delete Lecturer", from),
+        requestDelete: createPayloadAction<string>("Delete Lecturer", from),
     },
     form: {
         setLoading: createAction("Form loading...", from),
         setLoaded: createAction("Form loaded", from),
         reset: createAction("Reset form", from),
-        update: createPayloadAction<ILecturer>("Update Lecturer", from),
-        save: createAction("Save Lecturer", from),
-        add: createAction("Add Lecturer", from),
+        setValue: createPayloadAction<ILecturer>("Update Lecturer", from),
+        requestSave: createAction("Save Lecturer", from),
+        requestAdd: createAction("Add Lecturer", from),
     },
 });

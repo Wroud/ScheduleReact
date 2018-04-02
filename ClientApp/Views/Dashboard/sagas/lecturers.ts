@@ -9,18 +9,18 @@ import { getLecturer } from "../selectors";
 const { actions, creators } = lecturersActions;
 
 export function* lecturersSaga() {
-    yield takeEveryAction(actions.lecturers.load, fetchData);
-    yield takeEveryAction(actions.lecturer.delete, deleteLecturer);
+    yield takeEveryAction(actions.lecturers.requestLoad, fetchData);
+    yield takeEveryAction(actions.lecturer.requestDelete, deleteLecturer);
     yield takeEveryAction(actions.lecturer.edit, editLecturer);
-    yield takeEveryAction([actions.form.add, actions.form.save], submitLecturer);
+    yield takeEveryAction([actions.form.requestAdd, actions.form.requestSave], submitLecturer);
 }
 
 export function* fetchData(action) {
     const { data, state, errors }: JsonQueryResult<ILecturer[]> = yield call(api.lecturers.load);
 
     if (state) {
-        const result = yield dbContext.lecturers.add(data);
-        yield put(creators.lecturers.update(result));
+        const ids = yield dbContext.lecturers.add(data);
+        yield put(creators.lecturers.setLecturers(ids));
     } else {
         console.log(errors);
         yield put({ type: "FETCH_FAILED", errors });
@@ -37,7 +37,7 @@ export function* submitLecturer(action) {
     if (state) {
         const result = yield dbContext.lecturers.add([data]);
         yield put(actions.form.reset);
-        yield put(creators.lecturers.update(dbContext.lecturers.getAllIds()));
+        yield put(creators.lecturers.setLecturers(dbContext.lecturers.getAllIds()));
     } else {
         console.log(errors);
         yield put({ type: "FETCH_FAILED", errors });
@@ -46,14 +46,14 @@ export function* submitLecturer(action) {
     yield put(actions.form.setLoaded);
 }
 
-export function* deleteLecturer(action: typeof actions.lecturer.delete) {
+export function* deleteLecturer(action: typeof actions.lecturer.requestDelete) {
     yield put(actions.lecturers.setLoading);
     const id = action.payload;
     const { data, state, errors }: JsonQueryResult<ILecturer> = yield call(api.lecturers.delete, id);
 
     if (state) {
         dbContext.lecturers.remove(id);
-        yield put(creators.lecturers.update(dbContext.lecturers.getAllIds()));
+        yield put(creators.lecturers.setLecturers(dbContext.lecturers.getAllIds()));
     } else {
         console.log(errors);
         yield put({ type: "FETCH_FAILED", errors });
@@ -64,5 +64,5 @@ export function* deleteLecturer(action: typeof actions.lecturer.delete) {
 
 export function* editLecturer(action: typeof actions.lecturer.edit) {
     const lecturer = yield dbContext.lecturers.get(action.payload);
-    yield put(creators.form.update({ ...lecturer }));
+    yield put(creators.form.setValue({ ...lecturer }));
 }

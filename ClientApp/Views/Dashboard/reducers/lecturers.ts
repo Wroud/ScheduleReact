@@ -12,7 +12,7 @@ const updateLecturer = (state, payload) => ({ lecturer: payload });
 export const lecturerFormReducer =
     createSubReducer<Store.ILecturersState, Store.ILecturerFormState>("form", Store.initLecturerFormState)
         .on(actions.form.reset, setFormInitState)
-        .on(actions.form.update, updateLecturer)
+        .on(actions.form.setValue, updateLecturer)
         .on(actions.form.setLoaded, setLoading(false))
         .on(actions.form.setLoading, setLoading(true))
 
@@ -22,7 +22,7 @@ export const lecturersReducer =
     createSubReducer<Store.IState, Store.ILecturersState>("lecturers", Store.initLecturersState)
         .join(lecturerFormReducer)
 
-        .on(actions.lecturers.load, setLoading(true))
-        .on(actions.lecturers.update, updateLecturers)
+        .on(actions.lecturers.requestLoad, setLoading(true))
+        .on(actions.lecturers.setLecturers, updateLecturers)
         .on(actions.lecturers.setLoaded, setLoading(false))
         .on(actions.lecturers.setLoading, setLoading(true));

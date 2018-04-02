@@ -47,7 +47,7 @@ class LecturerFormClass extends React.Component<Props, IState> {
         const name = !target.name ? target.id : target.name;
 
         // tslint:disable-next-line:no-object-literal-type-assertion
-        this.props.actions.update({
+        this.props.actions.setValue({
             [name]: value,
         } as ILecturer);
     }
@@ -57,9 +57,9 @@ class LecturerFormClass extends React.Component<Props, IState> {
     handleSubmit = () => {
         console.log(12);
         if (this.props.editing) {
-            this.props.actions.save();
+            this.props.actions.requestSave();
         } else {
-            this.props.actions.add();
+            this.props.actions.requestAdd();
         }
     }
     render() {

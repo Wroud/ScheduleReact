@@ -12,7 +12,7 @@ type Props = { lecturers: string[] } & typeof lecturersActions.mapCreators.lectu
 export class LecturersList extends React.PureComponent<Props> {
     componentWillMount() {
         if (!this.props.lecturers || this.props.lecturers.length === 0) {
-            this.props.actions.load();
+            this.props.actions.requestLoad();
         }
     }
     render() {

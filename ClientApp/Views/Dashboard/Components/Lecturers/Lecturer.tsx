@@ -43,7 +43,7 @@ export class Lecturer extends React.PureComponent<Props> {
         this.props.actions.edit(this.props.id);
     }
     private handleDelete = () => {
-        this.props.actions.delete(this.props.id);
+        this.props.actions.requestDelete(this.props.id);
     }
 }
 
