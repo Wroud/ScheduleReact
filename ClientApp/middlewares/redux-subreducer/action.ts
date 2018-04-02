@@ -1,5 +1,6 @@
 ﻿import {
     Action,
+    ActionCreator as ReduxActionCreator,
     ActionCreatorsMapObject,
     bindActionCreators,
     Dispatch,
@@ -28,11 +29,34 @@ interface IActionsClass {
     [key: string]: IExtendAction<any>;
 }
 
+interface IActionsGroups {
+    [key: string]: IActionsClass;
+}
+
 type ActionCreator<TA extends IExtendAction> = (payload?: TA["payload"]) => TA;
 
 type TransformActionsClass<T extends IActionsClass> = {
     [P in keyof T]: ActionCreator<T[P]>;
 };
+
+type TransformActionsGroups<T extends IActionsGroups> = {
+    [P in keyof T]: TransformActionsClass<T[P]>;
+};
+
+type TransformActionsToMaps<T extends IActionsGroups> = {
+    [P in keyof T]: (dispatch: Dispatch<Action>) => { actions: TransformActionsClass<T[P]> };
+};
+
+type TransformCreatorsToMaps<T extends IActionsGroups> = {
+    [P in keyof T]: { actions: TransformActionsClass<T[P]> };
+};
+
+interface IActionsResult<T extends IActionsGroups> {
+    actions: T;
+    creators: TransformActionsGroups<T>;
+    mapDispatch: TransformActionsToMaps<T>;
+    mapCreators: TransformCreatorsToMaps<T>;
+}
 
 let id = 0;
 const createdActions: { [key: string]: IActionMeta } = {};
@@ -62,8 +86,23 @@ export const getCreators = <T extends IActionsClass>(actions: T): TransformActio
     });
     return result;
 };
+
 export const getActionCreator = (action: Action) => () => action;
 export const getPayloadCreator = <TData>(action: IPayloadAction<TData>) => (payload: TData) => ({ ...action, payload });
-export const createActions = <T extends ActionCreatorsMapObject>(actions: T): { actions: T } => ({ actions });
-export const mapActionsToProps = <T extends ActionCreatorsMapObject>(actions: { actions: T }) =>
+export const mapToActions = <T extends ActionCreatorsMapObject>(actions: T): { actions: T } => ({ actions });
+export const mapDispatchToCreators = <T extends ActionCreatorsMapObject>(actions: { actions: T }) =>
     (dispatch: Dispatch<Action>) => ({ actions: bindActionCreators(actions.actions, dispatch) });
+
+export const prepareActions = <T extends IActionsGroups>(actions: T): IActionsResult<T> => {
+    const creators: TransformActionsGroups<T> = {} as any;
+    const mapCreators: TransformCreatorsToMaps<T> = {} as any;
+    const mapDispatch: TransformActionsToMaps<T> = {} as any;
+    Object.keys(actions).forEach(action => {
+        creators[action] = getCreators(actions[action]) as any;
+        mapCreators[action] = mapToActions(creators[action]);
+    });
+    Object.keys(actions).forEach(action => {
+        mapDispatch[action] = mapDispatchToCreators(mapToActions(creators[action]));
+    });
+    return { actions, creators, mapDispatch, mapCreators };
+};

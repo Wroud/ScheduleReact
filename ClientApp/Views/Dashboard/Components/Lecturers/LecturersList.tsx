@@ -3,13 +3,11 @@ import { connect } from "react-redux";
 import {
     List,
 } from "rmwc/List";
-import { actionCreators, actions, actionsMaps } from "../../actions";
-import { lecturersReducer } from "../../reducers";
+import { lecturersActions } from "../../actions";
 import { getLecturers } from "../../selectors";
-import { ILecturersState } from "../../store";
 import Lecturer from "./Lecturer";
 
-type Props = { lecturers: string[] } & typeof actionCreators.lecturers.lecturers;
+type Props = { lecturers: string[] } & typeof lecturersActions.mapCreators.lecturers;
 
 export class LecturersList extends React.PureComponent<Props> {
     componentWillMount() {
@@ -30,5 +28,5 @@ export class LecturersList extends React.PureComponent<Props> {
 
 export default connect(
     state => ({ lecturers: getLecturers(state) }),
-    actionsMaps.lecturers.lecturers,
+    lecturersActions.mapDispatch.lecturers,
 )(LecturersList);

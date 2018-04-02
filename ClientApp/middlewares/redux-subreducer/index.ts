@@ -7,8 +7,9 @@ export {
     getActionCreator,
     getPayloadCreator,
     getCreators,
-    createActions,
-    mapActionsToProps,
+    mapToActions,
+    mapDispatchToCreators,
+    prepareActions,
 } from "./action";
 export {
     INamedReducer,

@@ -1,6 +1,7 @@
 import { createSubReducer } from "@app/middlewares/redux-subreducer";
-import { actions } from "../actions";
+import { lecturersActions } from "../actions";
 import * as Store from "../store";
+const { actions, creators } = lecturersActions;
 
 const setLoading = (value: boolean) => () => ({ loading: value });
 const setEditing = (value: boolean) => () => ({ editing: value });
@@ -10,18 +11,18 @@ const updateLecturer = (state, payload) => ({ lecturer: payload });
 
 export const lecturerFormReducer =
     createSubReducer<Store.ILecturersState, Store.ILecturerFormState>("form", Store.initLecturerFormState)
-        .on(actions.lecturers.form.reset, setFormInitState)
-        .on(actions.lecturers.form.update, updateLecturer)
-        .on(actions.lecturers.form.setLoaded, setLoading(false))
-        .on(actions.lecturers.form.setLoading, setLoading(true))
+        .on(actions.form.reset, setFormInitState)
+        .on(actions.form.update, updateLecturer)
+        .on(actions.form.setLoaded, setLoading(false))
+        .on(actions.form.setLoading, setLoading(true))
 
-        .on(actions.lecturers.lecturer.edit, setEditing(true));
+        .on(actions.lecturer.edit, setEditing(true));
 
 export const lecturersReducer =
     createSubReducer<Store.IState, Store.ILecturersState>("lecturers", Store.initLecturersState)
         .join(lecturerFormReducer)
 
-        .on(actions.lecturers.lecturers.load, setLoading(true))
-        .on(actions.lecturers.lecturers.update, updateLecturers)
-        .on(actions.lecturers.lecturers.setLoaded, setLoading(false))
-        .on(actions.lecturers.lecturers.setLoading, setLoading(true));
+        .on(actions.lecturers.load, setLoading(true))
+        .on(actions.lecturers.update, updateLecturers)
+        .on(actions.lecturers.setLoaded, setLoading(false))
+        .on(actions.lecturers.setLoading, setLoading(true));

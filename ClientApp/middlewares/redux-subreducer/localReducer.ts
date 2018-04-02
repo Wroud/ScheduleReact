@@ -71,28 +71,21 @@ export class LocalReducer<TProps extends IComponentId, TState>
         return nextState;
     }
 
-    on = <TPayload>({ type }: IExtendAction<TPayload>, reducer: LocalActionReducer<TProps, TState, TPayload>) => {
+    on = <TPayload>({ type }: IExtendAction<TPayload>, reducer: LocalActionReducer<TProps, TState, TPayload>, own?: boolean, componentId?: string) => {
         this.actionReducerList[type] = {
             reducer,
+            own,
+            componentId,
         };
         return this;
     }
 
     onOwn = <TPayload>({ type }: IExtendAction<TPayload>, reducer: LocalActionReducer<TProps, TState, TPayload>) => {
-        this.actionReducerList[type] = {
-            own: true,
-            reducer,
-        };
-        return this;
+        return this.on({ type }, reducer, true);
     }
 
     onId = <TPayload>(componentId: string, { type }: IExtendAction<TPayload>, reducer: LocalActionReducer<TProps, TState, TPayload>) => {
-        this.actionReducerList[type] = {
-            own: true,
-            reducer,
-            componentId,
-        };
-        return this;
+        return this.on({ type }, reducer, false, componentId);
     }
 
     handleComponentMount = (component: React.Component<TProps, TState>) => {

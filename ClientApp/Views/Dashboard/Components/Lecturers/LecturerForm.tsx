@@ -1,14 +1,15 @@
 import * as React from "react";
 import { connect } from "react-redux";
+import { compose } from "redux";
 import { Button, ButtonIcon } from "rmwc/Button";
 import { FormField } from "rmwc/FormField";
 import { Select } from "rmwc/Select";
 import { TextField, TextFieldHelperText, TextFieldIcon } from "rmwc/TextField";
+import { Typography } from "rmwc/Typography";
 
 import { connectState, connectWithComponentId, IComponentId, ILocalReducer } from "@app/middlewares/redux-subreducer";
 import { ILecturer } from "@app/store/database";
-import { compose } from "redux";
-import { actionCreators, actions, actionsMaps } from "../../actions";
+import { lecturersActions } from "../../actions";
 import { getLecturer, getLecturerForm } from "../../selectors";
 
 interface IState {
@@ -18,9 +19,10 @@ interface IState {
 type Props =
     {
         editingId: string;
+        name: string;
         editing: boolean;
     }
-    & typeof actionCreators.lecturers.form;
+    & typeof lecturersActions.mapCreators.form;
 
 class LecturerFormClass extends React.Component<Props, IState> {
     private FirstNameField: React.ComponentClass<any>;
@@ -61,23 +63,25 @@ class LecturerFormClass extends React.Component<Props, IState> {
         }
     }
     render() {
-        const { editingId, editing } = this.props;
-        const attr = { required: true, dense: true };
+        const { editingId, editing, name } = this.props;
+        const attr = { required: true, dense: false };
         const selectOptions = [{ value: "0", label: "Мужчина" }, { value: "1", label: "Женщина" }];
         const { FirstNameField, SecondNameField, LastNameField, FullNameField, GenderSelect } = this;
         return (
             <div>
-                {editing ? "Изменить" : "Добавить"} лектора <span className="mdc-typography--caption" />
-                <br />
+                <Typography use="title" tag={"div"}>{editing ? "Изменить" : "Добавить"} лектора</Typography>
+                <Typography use="subheading1" tag={"div"}>{name}</Typography>
                 <input name={"id"} value={editingId} hidden={true} />
-                <FirstNameField {...attr} onChange={this.handleInputChange} />
-                <SecondNameField {...attr} onChange={this.handleInputChange} />
-                <LastNameField {...attr} onChange={this.handleInputChange} />
-                <FullNameField {...attr} onChange={this.handleInputChange} />
-                <GenderSelect options={selectOptions} onChange={this.handleInputChange} />
-                <TextFieldHelperText>Optional help text.</TextFieldHelperText>
+                <FormField><FirstNameField {...attr} onChange={this.handleInputChange} /></FormField>
+                <FormField><SecondNameField {...attr} onChange={this.handleInputChange} /></FormField>
+                <FormField><LastNameField {...attr} onChange={this.handleInputChange} /></FormField>
+                <FormField><FullNameField {...attr} onChange={this.handleInputChange} /></FormField>
+                <FormField>
+                    <GenderSelect options={selectOptions} onChange={this.handleInputChange} />
+                    <TextFieldHelperText>Optional help text.</TextFieldHelperText>
+                </FormField>
                 {/* <TextFieldHelperText persistent validationMsg id={7}>The field is required.</TextFieldHelperText> */}
-
+                <br /><br /><br />
                 <Button onClick={this.handleReset} hidden={!editing}>Отменить</Button>
                 <Button raised={true} onClick={this.handleSubmit}>
                     {editing ? "Сохранить" : "Добавить"}
@@ -114,15 +118,16 @@ const mapStateToProps = state => {
     return {
         editing: mapState.editing,
         editingId: mapState.lecturer.id,
+        name: mapState.lecturer.fullName,
     };
 };
 
 const mapErrors = (props, prevState, errors) => ({ errors });
 
 const stateReducer = (reducer: ILocalReducer<Props & IComponentId, IState>) => reducer
-    .on(actions.lecturers.lecturer.edit, mapErrors)
-    .onOwn(actions.lecturers.lecturer.edit, mapErrors)
-    .onId("component-id", actions.lecturers.lecturer.edit, mapErrors);
+    .on(lecturersActions.actions.lecturer.edit, mapErrors)
+    .onOwn(lecturersActions.actions.lecturer.edit, mapErrors)
+    .onId("component-id", lecturersActions.actions.lecturer.edit, mapErrors);
 
 const initState = {
     errors: "",
@@ -136,7 +141,7 @@ const enhance = compose<React.ComponentClass>(
     ),
     connectWithComponentId(
         mapStateToProps,
-        actionsMaps.lecturers.form,
+        lecturersActions.mapDispatch.form,
     ),
 );
 

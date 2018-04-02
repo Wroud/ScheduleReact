@@ -1,15 +1,13 @@
 ﻿import {
     createAction,
-    createActions,
     createPayloadAction,
-    getCreators,
-    mapActionsToProps,
+    prepareActions,
 } from "@app/middlewares/redux-subreducer";
 import { ILecturer } from "@app/store/database";
 
 const from = "Views/Dashboard";
 
-export const actions = {
+export const { actions, creators, mapDispatch, mapCreators } = prepareActions({
     lecturers: {
         setLoading: createAction("Lecturers loading...", from),
         setLoaded: createAction("Lecturers loaded", from),
@@ -28,16 +26,4 @@ export const actions = {
         save: createAction("Save Lecturer", from),
         add: createAction("Add Lecturer", from),
     },
-};
-
-export const creators = {
-    lecturers: createActions(getCreators(actions.lecturers)),
-    lecturer: createActions(getCreators(actions.lecturer)),
-    form: createActions(getCreators(actions.form)),
-};
-
-export const maps = {
-    lecturers: mapActionsToProps(creators.lecturers),
-    lecturer: mapActionsToProps(creators.lecturer),
-    form: mapActionsToProps(creators.form),
-};
+});

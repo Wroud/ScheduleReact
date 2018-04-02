@@ -7,13 +7,13 @@ import { Grid, GridCell, GridInner } from "rmwc/Grid";
 import { LinearProgress } from "rmwc/LinearProgress";
 import { Typography } from "rmwc/Typography";
 
-import { actionCreators, actions, actionsMaps } from "../../actions";
+import { lecturersActions } from "../../actions";
 import { getLecturerForm, getLecturersState } from "../../selectors";
 import { LecturerForm } from "./LecturerForm";
 import LecturersList from "./LecturersList";
 
 type LecturersProps =
-    & typeof actionCreators.lecturers.lecturers
+    & typeof lecturersActions.mapCreators.lecturers
     & RouteComponentProps<any>;
 
 class Lecturers extends React.PureComponent<LecturersProps> {
@@ -28,13 +28,15 @@ class Lecturers extends React.PureComponent<LecturersProps> {
                 </GridCell>
                 <GridCell span={12}>
                     <GridInner>
-                        <GridCell span={3} className={"progress--box mdc-layout-grid__cell--align-top"}>
+                        <GridCell span={12}>
+                            <Button raised={true} onClick={this.props.actions.load}>Reload</Button>
+                        </GridCell>
+                        <GridCell span={4} className={"progress--box mdc-layout-grid__cell--align-top"}>
                             <FormProgress />
                             <LecturerForm />
                         </GridCell>
                         <Elevation z={4} wrap={true} className={"progress--box mdc-layout-grid__cell--align-top"}>
-                            <GridCell span={9}>
-                                <Button raised={true} onClick={this.props.actions.load}>Reload</Button>
+                            <GridCell span={8}>
                                 <ListProgress />
                                 <LecturersList />
                             </GridCell>
@@ -58,5 +60,5 @@ export const FormProgress = connect(
 
 export default withRouter<RouteComponentProps<any> | undefined>(connect(
     null,
-    actionsMaps.lecturers.lecturers,
+    lecturersActions.mapDispatch.lecturers,
 )(Lecturers as any) as any);

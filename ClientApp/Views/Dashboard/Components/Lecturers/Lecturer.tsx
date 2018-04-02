@@ -11,14 +11,14 @@ import {
     SimpleListItem,
 
 } from "rmwc/List";
-import { actionCreators, actions, actionsMaps } from "../../actions";
+import { lecturersActions } from "../../actions";
 import { makeGetLecturer } from "../../selectors";
 
 interface IOwnProps {
     id: string;
 }
 
-type Props = ILecturer & typeof actionCreators.lecturers.lecturer;
+type Props = ILecturer & typeof lecturersActions.mapCreators.lecturer;
 
 export class Lecturer extends React.PureComponent<Props> {
     render() {
@@ -55,5 +55,5 @@ const mapStateToProps = (state: IApplicationState, props?: IOwnProps): ILecturer
 
 export default connect(
     mapStateToProps,
-    actionsMaps.lecturers.lecturer,
+    lecturersActions.mapDispatch.lecturer,
 )(Lecturer);
