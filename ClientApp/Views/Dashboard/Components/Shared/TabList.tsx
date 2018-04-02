@@ -28,7 +28,7 @@ interface IMenuLink {
 
 type Props = RouteComponentProps<{}>;
 
-class TabList extends React.PureComponent<Props, {}> {
+class TabListClass extends React.PureComponent<Props, {}> {
     links: IMenuLink[];
 
     constructor(props: Props) {
@@ -75,4 +75,4 @@ class TabList extends React.PureComponent<Props, {}> {
     }
 }
 
-export default withRouter<{}>(TabList);
+export const TabList = withRouter<{}>(TabListClass);

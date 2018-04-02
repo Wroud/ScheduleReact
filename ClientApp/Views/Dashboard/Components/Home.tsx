@@ -1,7 +1,7 @@
 ﻿import * as React from "react";
 import { RouteComponentProps } from "react-router-dom";
 
-export default class Home extends React.PureComponent<RouteComponentProps<any> | undefined> {
+export class Home extends React.PureComponent<RouteComponentProps<any> | undefined> {
     render() {
         return (
             <div>

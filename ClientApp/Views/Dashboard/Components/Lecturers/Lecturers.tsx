@@ -16,7 +16,7 @@ type LecturersProps =
     & typeof lecturersActions.mapCreators.lecturers
     & RouteComponentProps<any>;
 
-class Lecturers extends React.PureComponent<LecturersProps> {
+class LecturersClass extends React.PureComponent<LecturersProps> {
     render() {
         return (
             <Grid>
@@ -58,7 +58,7 @@ export const FormProgress = connect(
     () => ({}),
 )(LinearProgress);
 
-export default withRouter<RouteComponentProps<any> | undefined>(connect(
+export const Lecturers =  withRouter<RouteComponentProps<any> | undefined>(connect(
     null,
     lecturersActions.mapDispatch.lecturers,
-)(Lecturers as any) as any);
+)(LecturersClass as any) as any);

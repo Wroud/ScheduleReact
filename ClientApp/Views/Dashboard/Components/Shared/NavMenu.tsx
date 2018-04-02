@@ -8,7 +8,7 @@ import {
     ToolbarTitle,
 } from "rmwc/Toolbar";
 
-import TabList from "./TabList";
+import { TabList } from "./TabList";
 
 interface IProps {
     switchDrawer: () => void;
