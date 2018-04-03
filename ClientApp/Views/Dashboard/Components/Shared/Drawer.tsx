@@ -16,7 +16,7 @@ import {
 import { connectState, connectWithComponentId, IComponentId, ILocalReducer } from "@app/middlewares/redux-subreducer";
 import { compose } from "redux";
 import { moduleActions } from "../../actions";
-import Module from "../../module";
+import { drawerNavigation } from "../../navigation";
 
 interface IProps {
     onClose?: () => void;
@@ -49,7 +49,7 @@ export class DrawerWraperClass extends React.Component<IProps & RouteComponentPr
         super(props);
         this.state = initState;
 
-        this.links = Module.navigation.map<IMenuLink>(({ title, url, path, exact }, key) => ({
+        this.links = drawerNavigation.map<IMenuLink>(({ title, url, path, exact }, key) => ({
             key,
             title: title || "?",
             url,
@@ -82,15 +82,20 @@ export class DrawerWraperClass extends React.Component<IProps & RouteComponentPr
         );
     }
 
-    private getElements = () =>
-        this.links.map(({ title, url }, index) => (
-            <ListItem key={title} wrap={false}>
-                {/* <Link to={url}> */}
-                <ListItemGraphic>star_border</ListItemGraphic>
-                <ListItemText>{title}</ListItemText>
-                {/* </Link> */}
-            </ListItem>
-        ))
+    private getElements = () => {
+        let pathname = "/";
+        if (!!this.props.location) {
+            pathname = this.props.location.pathname;
+        }
+        return this.links.map((link, index) => (
+            <Link to={link.url} key={link.title}>
+                <ListItem wrap={false} selected={!!matchPath(pathname, link)}>
+                    <ListItemGraphic>star_border</ListItemGraphic>
+                    <ListItemText>{link.title}</ListItemText>
+                </ListItem>
+            </Link>
+        ));
+    }
 
     private getActive = () => {
         let pathname = "/";

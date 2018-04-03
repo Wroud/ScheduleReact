@@ -15,7 +15,7 @@ import {
     TabIconText,
 } from "rmwc/Tabs";
 
-import Module from "../module";
+import { view } from "../view";
 
 interface IMenuLink {
     key: number;
@@ -34,7 +34,7 @@ class TabList extends React.Component<Props, {}> {
     constructor(props: Props) {
         super(props);
 
-        this.links = Module.navigation.map<IMenuLink>(({ title, url, path, exact }, key) => ({
+        this.links = view.navigation.map<IMenuLink>(({ title, url, path, exact }, key) => ({
             key,
             title: title || "?",
             url,

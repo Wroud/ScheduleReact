@@ -7,4 +7,4 @@ import * as Store from "./Store";
 export const name = "home";
 export const reducer = configureReducer(name);
 
-export default createView(name, navigation, reducer);
+export const view = createView(name, navigation, reducer);

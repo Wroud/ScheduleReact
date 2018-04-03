@@ -11,6 +11,15 @@ export const navigation: INavigationMember[] =
             url: "/Dashboard/",
             title: "Dashboard",
             path: "/Dashboard/",
+        },
+    ];
+
+export const drawerNavigation: INavigationMember[] =
+    [
+        {
+            url: "/Dashboard/",
+            title: "Dashboard",
+            path: "/Dashboard/",
             exact: true,
         },
         {

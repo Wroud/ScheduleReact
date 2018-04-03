@@ -6,4 +6,4 @@ import { rootSaga } from "./sagas/sagas";
 export const name = "dashboard";
 export const reducer = configureReducer(name);
 
-export default createView(name, navigation, reducer, rootSaga);
+export const view = createView(name, navigation, reducer, rootSaga);

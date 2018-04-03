@@ -77,9 +77,9 @@ export class ViewLoader<TAppState extends IViewStatePart>
             this._routes.push(routes);
         });
 
-        const context = require.context("./Views/", true, /^\.\/[^\/]+\/module.ts$/);
+        const context = require.context("./Views/", true, /^\.\/[^\/]+\/view.ts$/);
         context.keys().forEach(el => {
-            const view = context<any>(el).default as View<TAppState, any, any>;
+            const view = context<any>(el).view as View<TAppState, any, any>;
 
             if (!view) {
                 return;

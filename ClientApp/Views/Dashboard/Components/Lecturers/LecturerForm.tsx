@@ -72,16 +72,14 @@ class LecturerFormClass extends React.Component<Props, IState> {
                 <Typography use="title" tag={"div"}>{editing ? "Изменить" : "Добавить"} лектора</Typography>
                 <Typography use="subheading1" tag={"div"}>{name}</Typography>
                 <input name={"id"} value={editingId} hidden={true} />
-                <FormField><FirstNameField {...attr} onChange={this.handleInputChange} /></FormField>
-                <FormField><SecondNameField {...attr} onChange={this.handleInputChange} /></FormField>
-                <FormField><LastNameField {...attr} onChange={this.handleInputChange} /></FormField>
-                <FormField><FullNameField {...attr} onChange={this.handleInputChange} /></FormField>
-                <FormField>
-                    <GenderSelect options={selectOptions} onChange={this.handleInputChange} />
-                    <TextFieldHelperText>Optional help text.</TextFieldHelperText>
-                </FormField>
+                <FirstNameField {...attr} onChange={this.handleInputChange} />
+                <SecondNameField {...attr} onChange={this.handleInputChange} />
+                <LastNameField {...attr} onChange={this.handleInputChange} />
+                <FullNameField {...attr} onChange={this.handleInputChange} />
+                <GenderSelect options={selectOptions} onChange={this.handleInputChange} />
+                <TextFieldHelperText>Optional help text.</TextFieldHelperText>
                 {/* <TextFieldHelperText persistent validationMsg id={7}>The field is required.</TextFieldHelperText> */}
-                <br /><br /><br />
+
                 <Button onClick={this.handleReset} hidden={!editing}>Отменить</Button>
                 <Button raised={true} onClick={this.handleSubmit}>
                     {editing ? "Сохранить" : "Добавить"}

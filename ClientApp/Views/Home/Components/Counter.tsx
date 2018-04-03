@@ -5,8 +5,8 @@ import { Link, RouteComponentProps, withRouter } from "react-router-dom";
 import { Typography } from "rmwc/Typography";
 
 import * as Actions from "../actions";
-import Module from "../module";
 import * as Store from "../Store";
+import { view } from "../view";
 
 type CounterProps =
     Store.IState
@@ -32,6 +32,6 @@ class Counter extends React.PureComponent<CounterProps> {
 }
 
 export default withRouter<RouteComponentProps<any> | undefined>(connect(
-    Module.stateSelector,
+    view.stateSelector,
     Actions.actionCreators,
 )(Counter as any) as any);

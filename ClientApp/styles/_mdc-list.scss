@@ -12,3 +12,23 @@
         }
     }
 }
+
+.mdc-list>a {
+    text-decoration: none;
+    color: initial;
+}
+
+.submenu__children {
+    overflow: hidden;
+    max-height: 0;
+    -webkit-transition: max-height .3s;
+    -o-transition: max-height .3s;
+    transition: max-height .3s;
+    .mdc-list-item {
+        text-indent: 1.5rem;
+    }
+}
+
+.submenu__children--open {
+    max-height: 25rem;
+}
