@@ -15,7 +15,8 @@ interface ILocalActionList<TProps, TState> {
 
 interface ILocalAction<TProps, TState, TPayload> {
     own?: boolean;
-    componentId?: string;
+    fromComponentId?: string;
+    forComponentId?: string;
     reducer: LocalActionReducer<TProps, TState, TPayload>;
 }
 
@@ -28,7 +29,7 @@ export interface ILocalReducer<TProps extends IComponentId, TState> {
 
     on: <TPayload>(action: IExtendAction<TPayload>, reducer: LocalActionReducer<TProps, TState, TPayload>) => this;
     onOwn: <TPayload>(action: IExtendAction<TPayload>, reducer: LocalActionReducer<TProps, TState, TPayload>) => this;
-    onId: <TPayload>(componentId: string, action: IExtendAction<TPayload>, reducer: LocalActionReducer<TProps, TState, TPayload>) => this;
+    onFrom: <TPayload>(componentId: string, action: IExtendAction<TPayload>, reducer: LocalActionReducer<TProps, TState, TPayload>) => this;
 }
 
 export class LocalReducer<TProps extends IComponentId, TState>
@@ -46,21 +47,19 @@ export class LocalReducer<TProps extends IComponentId, TState>
         const nextState: TState = { ...state as any };
 
         if (!this.actionReducerList[action.type]) {
-            // if (this._name === MainReducerName) {
-            //     // this.logActionInfo(action);
-            //     console.log("Next app state: ", nextState);
-            // }
+            // this.logActionInfo(action);
             return nextState;
         }
 
-        const { type, payload, componentId } = action as IExtendAction<any>;
-        const { own, componentId: reducerComponentId, reducer } = this.actionReducerList[type];
-        if (own && componentId !== props.componentId
-            || reducerComponentId && reducerComponentId !== props.componentId) {
+        const { type, payload, fromComponentId, forComponentId } = action as IExtendAction<any>;
+        const { own, fromComponentId: reducerFromComponentId, reducer } = this.actionReducerList[type];
+        if (own && fromComponentId !== props.componentId
+            || reducerFromComponentId && reducerFromComponentId !== props.componentId
+            || forComponentId && forComponentId !== props.componentId) {
             return nextState;
         }
 
-        const diff = reducer(props, nextState, payload || {}, componentId);
+        const diff = reducer(props, nextState, payload || {}, fromComponentId);
         this.deepExtend(nextState, diff);
 
         console.log("Component: ", props.componentId);
@@ -71,11 +70,11 @@ export class LocalReducer<TProps extends IComponentId, TState>
         return nextState;
     }
 
-    on = <TPayload>({ type }: IExtendAction<TPayload>, reducer: LocalActionReducer<TProps, TState, TPayload>, own?: boolean, componentId?: string) => {
+    on = <TPayload>({ type }: IExtendAction<TPayload>, reducer: LocalActionReducer<TProps, TState, TPayload>, own?: boolean, fromComponentId?: string) => {
         this.actionReducerList[type] = {
             reducer,
             own,
-            componentId,
+            fromComponentId,
         };
         return this;
     }
@@ -84,7 +83,7 @@ export class LocalReducer<TProps extends IComponentId, TState>
         return this.on({ type }, reducer, true);
     }
 
-    onId = <TPayload>(componentId: string, { type }: IExtendAction<TPayload>, reducer: LocalActionReducer<TProps, TState, TPayload>) => {
+    onFrom = <TPayload>(componentId: string, { type }: IExtendAction<TPayload>, reducer: LocalActionReducer<TProps, TState, TPayload>) => {
         return this.on({ type }, reducer, false, componentId);
     }
 
@@ -186,8 +185,8 @@ type Connect = <TStateProps, TDispatchProps, TOwnProps extends IComponentId, TMe
 
 export const connectWithComponentId: Connect = (mapStateToProps, mapDispatchToProps, mergeProps) => {
     const mapDispatch = (dispatch: Dispatch<any>, ownProps?) => {
-        const componentId = (!!ownProps && ownProps.componentId !== undefined) ? ownProps.componentId : -1;
-        const _dispatch = (action: any) => dispatch(({ ...action, componentId }));
+        const fromComponentId = (!!ownProps && ownProps.componentId !== undefined) ? ownProps.componentId : -1;
+        const _dispatch = (action: any) => dispatch(({ ...action, fromComponentId }));
         return (mapDispatchToProps as any)(_dispatch, ownProps);
     };
     return connect(mapStateToProps, mapDispatch, mergeProps as any);

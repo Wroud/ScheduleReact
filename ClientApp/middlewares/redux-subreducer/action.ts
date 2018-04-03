@@ -10,7 +10,8 @@ export interface IExtendAction<TData = {}>
     extends Action {
 
     payload?: TData;
-    componentId?: string;
+    fromComponentId?: string;
+    forComponentId?: string;
 }
 
 export interface IPayloadAction<TData>
@@ -33,7 +34,7 @@ interface IActionsGroups {
     [key: string]: IActionsClass;
 }
 
-type ActionCreator<TA extends IExtendAction> = (payload?: TA["payload"]) => TA;
+type ActionCreator<TA extends IExtendAction> = (payload?: TA["payload"], forComponentId?: string) => TA;
 
 type TransformActionsClass<T extends IActionsClass> = {
     [P in keyof T]: ActionCreator<T[P]>;
@@ -82,13 +83,13 @@ export const getActionMeta = ({ type }: IExtendAction<any>): IActionMeta => crea
 export const getCreators = <T extends IActionsClass>(actions: T): TransformActionsClass<T> => {
     const result: TransformActionsClass<T> = {} as any;
     Object.keys(actions).forEach(action => {
-        result[action] = (payload?: any) => ({ ...actions[action] as any, payload });
+        result[action] = (payload?: any, forComponentId?: string) => ({ ...actions[action] as any, payload, forComponentId });
     });
     return result;
 };
 
 export const getActionCreator = (action: Action) => () => action;
-export const getPayloadCreator = <TData>(action: IPayloadAction<TData>) => (payload: TData) => ({ ...action, payload });
+export const getPayloadCreator = <TData>(action: IPayloadAction<TData>) => (payload: TData, forComponentId?: string) => ({ ...action, payload, forComponentId });
 export const mapToActions = <T extends ActionCreatorsMapObject>(actions: T): { actions: T } => ({ actions });
 export const mapDispatchToCreators = <T extends ActionCreatorsMapObject>(actions: { actions: T }) =>
     (dispatch: Dispatch<Action>) => ({ actions: bindActionCreators(actions.actions, dispatch) });

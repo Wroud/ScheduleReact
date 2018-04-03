@@ -127,7 +127,7 @@ const mapErrors = (props, prevState, errors) => ({ errors });
 const stateReducer = (reducer: ILocalReducer<Props & IComponentId, IState>) => reducer
     .on(lecturersActions.actions.lecturer.edit, mapErrors)
     .onOwn(lecturersActions.actions.lecturer.edit, mapErrors)
-    .onId("component-id", lecturersActions.actions.lecturer.edit, mapErrors);
+    .onFrom("component-id", lecturersActions.actions.lecturer.edit, mapErrors);
 
 const initState = {
     errors: "",
