@@ -1,7 +1,7 @@
 ﻿export {
     IState,
     initState,
-} from "./module";
+} from "./view";
 export {
     ILecturersState,
     initLecturersState,

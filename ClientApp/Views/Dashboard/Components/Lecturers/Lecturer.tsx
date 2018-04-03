@@ -8,7 +8,6 @@ import {
     ListItemMeta,
     ListItemSecondaryText,
     ListItemText,
-    SimpleListItem,
 
 } from "rmwc/List";
 import { lecturersActions } from "../../actions";

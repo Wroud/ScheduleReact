@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -8,19 +9,29 @@ using ScheduleReact.Tools;
 
 namespace ScheduleReact.Controllers
 {
-    
+
     [Route("api/Dashboard/Lecturers/[action]")]
     public partial class LecturersController : Controller
     {
         private readonly ScheduleDbContext DbContext;
-        public LecturersController (ScheduleDbContext dbContext) {
+        public LecturersController(ScheduleDbContext dbContext)
+        {
             this.DbContext = dbContext;
         }
+
         [HttpGet]
-        public async Task<IActionResult> GetLecturers () {
-            var lecturers = await DbContext.Lecturers.ToListAsync ();
-            return Json (JsonQuery.Create(true).Result(data: lecturers));
+        public async Task<IActionResult> GetLecturers()
+        {
+            var lecturers = await DbContext.Lecturers.ToListAsync();
+            // for (int i = 0; i < 1000; i++) {
+            //     lecturers.Add (new Lecturer () {
+            //         Id = Guid.NewGuid ().ToString (),
+            //         FirstName = $"Lecturer {i}",
+            //     });
+            // }
+            return Json(JsonQuery.Create(true).Result(data: lecturers));
         }
+
         [HttpPost]
         public async Task<ActionResult> AddOrEdit(Lecturer model)
         {
@@ -39,9 +50,9 @@ namespace ScheduleReact.Controllers
                     DbContext.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
                     current = await DbContext.Lecturers.FirstOrDefaultAsync(l => l.Id == model.Id);
                     var find = await DbContext.Lecturers.FirstOrDefaultAsync(l =>
-                        l.FirstName == model.FirstName
-                        && l.SecondName == model.SecondName
-                        && l.LastName == model.LastName);
+                       l.FirstName == model.FirstName &&
+                       l.SecondName == model.SecondName &&
+                       l.LastName == model.LastName);
 
                     if (find != null && find.Id != current.Id)
                     {
@@ -54,9 +65,9 @@ namespace ScheduleReact.Controllers
                 else
                 {
                     if (await DbContext.Lecturers.AnyAsync(l =>
-                        l.FirstName == model.FirstName
-                        && l.SecondName == model.SecondName
-                        && l.LastName == model.LastName))
+                           l.FirstName == model.FirstName &&
+                           l.SecondName == model.SecondName &&
+                           l.LastName == model.LastName))
                     {
                         res.AddError(null, "FirstName", "Лектор с таким именем фамилией и отчеством уже есть.");
                         goto res;
@@ -66,7 +77,7 @@ namespace ScheduleReact.Controllers
                 }
                 await DbContext.SaveChangesAsync();
             }
-            res:
+        res:
             return Json(res.Result(data: model));
         }
         // [HttpGet("{page?}")]
@@ -79,9 +90,10 @@ namespace ScheduleReact.Controllers
         {
             return Json(JsonQuery.Create(true).Result(
                 data: await DbContext.Lecturers.Where(l =>
-                    Regex.IsMatch(l.FullName, name, RegexOptions.IgnoreCase | RegexOptions.Multiline))
+                  Regex.IsMatch(l.FullName, name, RegexOptions.IgnoreCase | RegexOptions.Multiline))
                 .ToArrayAsync()));
         }
+
         [HttpGet("{id?}")]
         public async Task<ActionResult> GetLecturer(string id)
         {
@@ -92,6 +104,7 @@ namespace ScheduleReact.Controllers
             }
             return Json(res.Result(data: await DbContext.Lecturers.FirstOrDefaultAsync(l => l.Id == id)));
         }
+
         [HttpPost("{id?}")]
         public async Task<ActionResult> Delete(string id)
         {

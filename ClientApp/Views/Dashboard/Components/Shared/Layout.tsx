@@ -27,7 +27,7 @@ export class LayoutClass extends React.Component<typeof moduleActions.mapCreator
     }
 }
 
-const enhance = compose<React.ComponentClass>(
+const enhance = compose<React.ComponentClass<{}>>(
     withRouter,
     connect(
         null,

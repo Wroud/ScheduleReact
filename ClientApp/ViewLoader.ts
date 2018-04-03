@@ -54,9 +54,10 @@ export class ViewLoader<TAppState extends IViewStatePart>
 
     *sagas() {
         for (const saga of this._sagas) {
-            for (const effect of saga()) {
-                yield effect;
-            }
+            yield* saga();
+            // for (const effect of saga()) {
+            //     yield effect;
+            // }
         }
     }
 

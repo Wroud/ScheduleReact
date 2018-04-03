@@ -1,6 +1,7 @@
 ﻿import * as React from "react";
 import { connect } from "react-redux";
 import { RouteComponentProps, withRouter } from "react-router-dom";
+import { compose } from "redux";
 import { Button, ButtonIcon } from "rmwc/Button";
 import { Elevation } from "rmwc/Elevation";
 import { Grid, GridCell, GridInner } from "rmwc/Grid";
@@ -58,7 +59,12 @@ export const FormProgress = connect(
     () => ({}),
 )(LinearProgress);
 
-export const Lecturers =  withRouter<RouteComponentProps<any> | undefined>(connect(
-    null,
-    lecturersActions.mapDispatch.lecturers,
-)(LecturersClass as any) as any);
+const enhance = compose<React.ComponentClass<RouteComponentProps<any> | undefined>>(
+    withRouter,
+    connect(
+        null,
+        lecturersActions.mapDispatch.lecturers,
+    ),
+);
+
+export const Lecturers = enhance(LecturersClass);

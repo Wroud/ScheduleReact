@@ -2,9 +2,8 @@ import * as React from "react";
 import { connect } from "react-redux";
 import { compose } from "redux";
 import { Button, ButtonIcon } from "rmwc/Button";
-import { FormField } from "rmwc/FormField";
 import { Select } from "rmwc/Select";
-import { TextField, TextFieldHelperText, TextFieldIcon } from "rmwc/TextField";
+import { TextField, TextFieldHelperText } from "rmwc/TextField";
 import { Typography } from "rmwc/Typography";
 
 import { connectState, connectWithComponentId, IComponentId, ILocalReducer } from "@app/middlewares/redux-subreducer";
@@ -55,7 +54,6 @@ class LecturerFormClass extends React.Component<Props, IState> {
         this.props.actions.reset();
     }
     handleSubmit = () => {
-        console.log(12);
         if (this.props.editing) {
             this.props.actions.requestSave();
         } else {
@@ -123,9 +121,7 @@ const mapStateToProps = state => {
 const mapErrors = (props, prevState, errors) => ({ errors });
 
 const stateReducer = (reducer: ILocalReducer<Props & IComponentId, IState>) => reducer
-    .on(lecturersActions.actions.lecturer.edit, mapErrors)
-    .onOwn(lecturersActions.actions.lecturer.edit, mapErrors)
-    .onFrom("component-id", lecturersActions.actions.lecturer.edit, mapErrors);
+    .on(lecturersActions.actions.lecturer.edit, mapErrors);
 
 const initState = {
     errors: "",
@@ -135,7 +131,6 @@ const enhance = compose<React.ComponentClass>(
     connectState<Props, IState>(
         initState,
         stateReducer,
-        "component-id",
     ),
     connectWithComponentId(
         mapStateToProps,
