@@ -8,12 +8,12 @@ import {
 import { DrawerWrapper } from "./Drawer";
 import NavMenu from "./NavMenu";
 
-import { lecturersActions } from "../../actions";
+import { moduleActions } from "../../actions";
 
-export class LayoutClass extends React.Component<typeof lecturersActions.mapCreators.ui & RouteComponentProps<{}>> {
+export class LayoutClass extends React.Component<typeof moduleActions.mapCreators.drawer & RouteComponentProps<{}>> {
     render() {
         return [
-            <NavMenu switchDrawer={this.props.actions.switchDrawer} key={"drawer"} />,
+            <NavMenu switchDrawer={this.switchDrawer} key={"drawer"} />,
             (
                 <ToolbarFixedAdjust key={"toolbar"} className={"dashboard"}>
                     <DrawerWrapper />
@@ -22,13 +22,16 @@ export class LayoutClass extends React.Component<typeof lecturersActions.mapCrea
             ),
         ];
     }
+    private switchDrawer = () => {
+        this.props.actions.switchDrawer(undefined, "drawer");
+    }
 }
 
 const enhance = compose<React.ComponentClass>(
     withRouter,
     connect(
         null,
-        lecturersActions.mapDispatch.ui,
+        moduleActions.mapDispatch.drawer,
     ),
 );
 

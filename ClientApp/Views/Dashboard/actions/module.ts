@@ -1,11 +1,10 @@
-﻿import { createAction, getActionCreator } from "@app/middlewares/redux-subreducer";
+﻿import { createAction, createPayloadAction, prepareActions } from "@app/middlewares/redux-subreducer";
+import { ILecturer } from "@app/store/database";
 
-export const actions = {
-    increment: createAction("Increment", "Dashboard/Home"),
-    decrement: createAction("Decrement", "Dashboard/Home"),
-};
+const from = "Views/Dashboard";
 
-export const creators = {
-    increment: getActionCreator(actions.increment),
-    decrement: getActionCreator(actions.decrement),
-};
+export const { actions, creators, mapDispatch, mapCreators } = prepareActions({
+    drawer: {
+        switchDrawer: createAction("Switch Drawer", from),
+    },
+});

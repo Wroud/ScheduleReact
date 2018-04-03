@@ -1,7 +1,4 @@
 import * as lecturersActions from "./lecturers";
-import {
-    actions as dashboard,
-    creators as dashboardCreators,
-} from "./module";
+import * as moduleActions from "./module";
 
-export { lecturersActions };
+export { lecturersActions, moduleActions };

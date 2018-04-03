@@ -9,7 +9,6 @@ const from = "Views/Dashboard";
 
 export const { actions, creators, mapDispatch, mapCreators } = prepareActions({
     ui: {
-        switchDrawer: createAction("Switch Drawer", from),
     },
     lecturers: {
         setLoading: createAction("Lecturers loading...", from),

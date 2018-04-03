@@ -15,7 +15,7 @@ import {
 
 import { connectState, connectWithComponentId, IComponentId, ILocalReducer } from "@app/middlewares/redux-subreducer";
 import { compose } from "redux";
-import { lecturersActions } from "../../actions";
+import { moduleActions } from "../../actions";
 import Module from "../../module";
 
 interface IProps {
@@ -86,8 +86,8 @@ export class DrawerWraperClass extends React.Component<IProps & RouteComponentPr
         this.links.map(({ title, url }, index) => (
             <ListItem key={title} wrap={false}>
                 {/* <Link to={url}> */}
-                    <ListItemGraphic>star_border</ListItemGraphic>
-                    <ListItemText>{title}</ListItemText>
+                <ListItemGraphic>star_border</ListItemGraphic>
+                <ListItemText>{title}</ListItemText>
                 {/* </Link> */}
             </ListItem>
         ))
@@ -108,7 +108,7 @@ export class DrawerWraperClass extends React.Component<IProps & RouteComponentPr
 const switchDrawer = (props, prevState) => ({ open: !prevState.open });
 
 const stateReducer = (reducer: ILocalReducer<Props & IComponentId, IState>) => reducer
-    .on(lecturersActions.actions.ui.switchDrawer, switchDrawer);
+    .on(moduleActions.actions.drawer.switchDrawer, switchDrawer);
 
 const enhance = compose<React.ComponentClass>(
     withRouter,
