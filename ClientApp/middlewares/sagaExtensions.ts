@@ -1,5 +1,5 @@
-import { IExtendAction } from "@app/middlewares/redux-subreducer";
 import { ForkEffect, HelperFunc0, takeEvery } from "redux-saga/effects";
+import { IExtendAction } from "redux-subreducer";
 
 export function takeEveryAction(actions: IExtendAction<any> | Array<IExtendAction<any>>, worker: HelperFunc0<any>): ForkEffect {
     if (!(actions as IExtendAction<any>).type) {

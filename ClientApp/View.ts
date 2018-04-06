@@ -1,6 +1,6 @@
-﻿import { ISubReducer } from "@app/middlewares/redux-subreducer";
-import { RouteComponentProps } from "react-router";
+﻿import { RouteComponentProps } from "react-router";
 import { SagaIterator } from "redux-saga";
+import { ISubReducer } from "redux-subreducer";
 import { INavigationMember } from "./Navigation";
 import { ViewLoader } from "./ViewLoader";
 

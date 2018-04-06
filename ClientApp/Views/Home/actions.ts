@@ -1,5 +1,5 @@
-﻿import { createAction, getActionCreator } from "@app/middlewares/redux-subreducer";
-import { Action } from "redux";
+﻿import { Action } from "redux";
+import { createAction, getActionCreator } from "redux-subreducer";
 import * as Store from "./Store";
 
 export const actions = {

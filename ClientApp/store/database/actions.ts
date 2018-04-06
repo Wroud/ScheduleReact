@@ -1,4 +1,4 @@
-import { createPayloadAction, getCreators } from "@app/middlewares/redux-subreducer";
+import { createPayloadAction, getCreators } from "redux-subreducer";
 import { IDatabaseState, ITable, Tables } from "./DatabaseState";
 import { facultyTableName } from "./tables/Faculty";
 import { lecturerTableName } from "./tables/Lecturer";

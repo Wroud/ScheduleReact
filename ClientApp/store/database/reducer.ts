@@ -1,4 +1,4 @@
-import { createSubReducer } from "@app/middlewares/redux-subreducer";
+import { createSubReducer } from "redux-subreducer";
 import { IApplicationState } from "../ApplicationState";
 import { actions, tableActions } from "./actions";
 import { IDatabaseState, ITable } from "./DatabaseState";

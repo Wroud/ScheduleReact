@@ -1,6 +1,6 @@
-﻿import { createSubReducer } from "@app/middlewares/redux-subreducer";
-import { IApplicationState } from "@app/store";
+﻿import { IApplicationState } from "@app/store";
 import { IViewState } from "@app/View";
+import { createSubReducer } from "redux-subreducer";
 import { actions } from "./actions";
 import * as Store from "./Store";
 

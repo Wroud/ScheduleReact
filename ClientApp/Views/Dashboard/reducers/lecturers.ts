@@ -1,4 +1,4 @@
-import { createSubReducer } from "@app/middlewares/redux-subreducer";
+import { createSubReducer } from "redux-subreducer";
 import { lecturersActions } from "../actions";
 import * as Store from "../store";
 const { actions, creators } = lecturersActions;

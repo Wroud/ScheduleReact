@@ -13,8 +13,8 @@ import {
     ListItemText,
 } from "rmwc/List";
 
-import { connectState, connectWithComponentId, IComponentId, ILocalReducer } from "@app/middlewares/redux-subreducer";
 import { compose } from "redux";
+import { connectState, connectWithComponentId, IComponentId, ILocalReducer } from "redux-subreducer";
 import { moduleActions } from "../../actions";
 import { drawerNavigation } from "../../navigation";
 

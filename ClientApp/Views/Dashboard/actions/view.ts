@@ -1,5 +1,5 @@
-﻿import { createAction, createPayloadAction, prepareActions } from "@app/middlewares/redux-subreducer";
-import { ILecturer } from "@app/store/database";
+﻿import { ILecturer } from "@app/store/database";
+import { createAction, createPayloadAction, prepareActions } from "redux-subreducer";
 
 const from = "Views/Dashboard";
 

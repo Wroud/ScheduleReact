@@ -1,5 +1,5 @@
-import { createSubReducer, ISubReducer } from "@app/middlewares/redux-subreducer";
 import { SagaIterator } from "redux-saga";
+import { createSubReducer, ISubReducer } from "redux-subreducer";
 import { IView, IViewState, IViewStatePart, View } from "./View";
 import { IViewRoute, mapRoutes } from "./ViewRoutes";
 

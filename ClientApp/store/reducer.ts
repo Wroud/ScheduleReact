@@ -1,6 +1,6 @@
-import { createMainReducer, LocalListener } from "@app/middlewares/redux-subreducer";
 import { Store } from "react-redux";
 import { routerReducer } from "react-router-redux";
+import { createMainReducer, LocalListener } from "redux-subreducer";
 import { IApplicationState } from "./ApplicationState";
 import { reducer as DatabaseReducer } from "./database/reducer";
 

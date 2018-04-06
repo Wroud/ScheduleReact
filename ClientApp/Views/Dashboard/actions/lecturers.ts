@@ -1,9 +1,10 @@
-﻿import {
+﻿import { IErrorMessage } from "@app/middlewares/JsonQuery";
+import { ILecturer } from "@app/store/database";
+import {
     createAction,
     createPayloadAction,
     prepareActions,
-} from "@app/middlewares/redux-subreducer";
-import { ILecturer } from "@app/store/database";
+} from "redux-subreducer";
 
 const from = "Views/Dashboard";
 
@@ -25,6 +26,7 @@ export const { actions, creators, mapDispatch, mapCreators } = prepareActions({
         setLoaded: createAction("Form loaded", from),
         reset: createAction("Reset form", from),
         setValue: createPayloadAction<ILecturer>("Update Lecturer", from),
+        setErrors: createPayloadAction<IErrorMessage[]>("Set errors[]", from),
         requestSave: createAction("Save Lecturer", from),
         requestAdd: createAction("Add Lecturer", from),
     },
