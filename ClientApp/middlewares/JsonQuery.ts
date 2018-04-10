@@ -1,6 +1,6 @@
 import { addTask, fetch } from "domain-task";
 
-interface IErrorMessage {
+export interface IErrorMessage {
     id: string;
     name: string;
     message: string;

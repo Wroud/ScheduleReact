@@ -19,7 +19,7 @@ export default function configureStore(history: History, initialState?: IApplica
 
     if (module.hot) {
         module.hot.accept("./store/reducer", () => {
-            const nextRootReducer = require<any>("./store/reducer").appReducer.reducer;
+            const nextRootReducer = require<typeof reducer>("./store/reducer").appReducer.reducer;
             store.replaceReducer(nextRootReducer);
         });
     }

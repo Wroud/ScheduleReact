@@ -7,7 +7,7 @@ import { Switch } from "react-router";
 import { ConnectedRouter } from "react-router-redux";
 import sagaMiddlewareFactory from "redux-saga";
 import configureStore from "./configureStore";
-import * as ViewsModule from "./loadViews";
+import * as ViewsLoader from "./loadViews";
 import "./styles/style.scss";
 
 const baseUrl = document.getElementsByTagName("base")[0].getAttribute("href")!;
@@ -18,7 +18,7 @@ const sagaMiddleware = sagaMiddlewareFactory();
 const initialState = (window as any).initialReduxState;
 const store = configureStore(history, initialState, sagaMiddleware);
 
-let appViews = ViewsModule.views;
+let appViews = ViewsLoader.views;
 let sagaTask = sagaMiddleware.run(appViews.sagas);
 
 function renderApp() {
@@ -36,7 +36,7 @@ renderApp();
 
 if (module.hot) {
     module.hot.accept("./loadViews", () => {
-        appViews = require<typeof ViewsModule>("./loadViews").views;
+        appViews = require<typeof ViewsLoader>("./loadViews").views;
         sagaTask.cancel();
         sagaTask = sagaMiddleware.run(appViews.sagas);
         renderApp();

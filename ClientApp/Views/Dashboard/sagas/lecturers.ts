@@ -17,6 +17,7 @@ export function* lecturersSaga() {
 
 export function* fetchData(action) {
     const { data, state, errors }: JsonQueryResult<ILecturer[]> = yield call(api.lecturers.load);
+    yield put(actions.lecturers.setLoading);
 
     if (state) {
         const ids = yield dbContext.lecturers.add(data);
@@ -40,7 +41,7 @@ export function* submitLecturer(action) {
         yield put(creators.lecturers.setLecturers(dbContext.lecturers.getAllIds()));
     } else {
         console.log(errors);
-        yield put({ type: "FETCH_FAILED", errors });
+        yield put(creators.form.setErrors(errors));
     }
 
     yield put(actions.form.setLoaded);

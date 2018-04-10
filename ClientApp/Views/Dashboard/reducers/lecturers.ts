@@ -22,7 +22,6 @@ export const lecturersReducer =
     createSubReducer<Store.IState, Store.ILecturersState>("lecturers", Store.initLecturersState)
         .join(lecturerFormReducer)
 
-        .on(actions.lecturers.requestLoad, setLoading(true))
         .on(actions.lecturers.setLecturers, updateLecturers)
         .on(actions.lecturers.setLoaded, setLoading(false))
         .on(actions.lecturers.setLoading, setLoading(true));

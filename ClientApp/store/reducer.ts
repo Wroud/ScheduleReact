@@ -1,6 +1,6 @@
 import { Store } from "react-redux";
 import { routerReducer } from "react-router-redux";
-import { createMainReducer, LocalListener } from "redux-subreducer";
+import { createRootReducer, LocalListener } from "redux-subreducer";
 import { IApplicationState } from "./ApplicationState";
 import { reducer as DatabaseReducer } from "./database/reducer";
 
@@ -13,7 +13,7 @@ export const setStore = (store: Store<IApplicationState | undefined>) => {
 const initalState: Partial<IApplicationState> = {};
 
 export const appReducer =
-    createMainReducer<IApplicationState>(initalState)
+    createRootReducer<IApplicationState>(initalState)
         .join(DatabaseReducer)
         .joinReducer("routing", routerReducer)
         .joinListener("listener", LocalListener);
