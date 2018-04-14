@@ -1,18 +1,35 @@
 import * as React from "react";
 import { connect } from "react-redux";
 import { compose } from "redux";
+
 import { Button, ButtonIcon } from "rmwc/Button";
 import { Select } from "rmwc/Select";
 import { TextField, TextFieldHelperText } from "rmwc/TextField";
 import { Typography } from "rmwc/Typography";
 
-import { connectState, connectWithComponentId, IComponentId, ILocalReducer } from "@app/middlewares/redux-subreducer";
+import { FormSelectField } from "@app/components/FormSelectField";
+import { FormTextField } from "@app/components/FormTextField";
+import { IErrorMessage } from "@app/middlewares/JsonQuery";
 import { ILecturer } from "@app/store/database";
+import {
+    combineFieldValidators,
+    combineValidators,
+    createFieldValidator,
+    createFormValidator,
+    createRawFormValidator,
+    createValidator,
+    Form,
+    FormContext,
+    IFieldErrors,
+    IFormState,
+    Validation,
+} from "react-painlessform";
+import { connectState, connectWithComponentId, IComponentId, ILocalReducer } from "redux-subreducer";
 import { lecturersActions } from "../../actions";
 import { getLecturer, getLecturerForm } from "../../selectors";
 
 interface IState {
-    errors: string;
+    errors: IErrorMessage[];
 }
 
 type Props =
@@ -23,32 +40,53 @@ type Props =
     }
     & typeof lecturersActions.mapCreators.form;
 
-class LecturerFormClass extends React.Component<Props, IState> {
-    private FirstNameField: React.ComponentClass<any>;
-    private LastNameField: React.ComponentClass<any>;
-    private SecondNameField: React.ComponentClass<any>;
-    private FullNameField: React.ComponentClass<any>;
-    private GenderSelect: React.ComponentClass<any>;
+const mustBeNumber = value => (isNaN(value) ? "Must be a number" : undefined);
+const minValue = min => value =>
+    isNaN(value) || value >= min ? undefined : `Should be greater than ${min}`;
 
+const requiredValidate = createValidator<string>("required", data => data === "" ? "Requered" : []);
+const minLengthValidate = createValidator<string>("min length 3", data => data.length < 3 && data.length > 0 ? "Min length 3" : []);
+const maxLengthValidate = createValidator<string>("max length 6", data => data.length > 6 ? "Max length 6" : []);
+
+const firstNameValidator = createFieldValidator<ILecturer, string>(
+    "firstName",
+    combineValidators(maxLengthValidate, minLengthValidate, requiredValidate),
+);
+const lastNameValidator = createFieldValidator<ILecturer, string>(
+    "lastName",
+    combineValidators(maxLengthValidate, minLengthValidate, requiredValidate),
+);
+const submitValidator = createRawFormValidator<ILecturer>((values, state: IState) => {
+    const errors = {};
+    if (!state) {
+        return errors;
+    }
+    const { errors: stateErrors } = state;
+    if (stateErrors) {
+        Object.keys(values).forEach(name => {
+            const error = stateErrors.find(e => e.name.toLowerCase() === name.toLowerCase());
+            if (error) {
+                errors[name] = [...(errors[name] || []), error.message];
+            }
+        });
+    }
+    return errors;
+});
+const formValidator = createFormValidator<ILecturer>(
+    combineFieldValidators(
+        firstNameValidator,
+        lastNameValidator,
+        submitValidator,
+    ),
+);
+
+const initState: IState = {
+    errors: [],
+};
+
+class LecturerFormClass extends React.Component<Props> {
     constructor(props: Props) {
         super(props);
-
-        this.FirstNameField = FormTextField("firstName", "Fist Name");
-        this.LastNameField = FormTextField("lastName", "Last Name");
-        this.SecondNameField = FormTextField("secondName", "Second Name");
-        this.FullNameField = FormTextField("fullName", "Full Name");
-        this.GenderSelect = FormSelect("gender", "Gender");
-    }
-
-    handleInputChange = event => {
-        const target = event.target;
-        const value = target.type === "checkbox" ? target.checked : target.value;
-        const name = !target.name ? target.id : target.name;
-
-        // tslint:disable-next-line:no-object-literal-type-assertion
-        this.props.actions.setValue({
-            [name]: value,
-        } as ILecturer);
     }
     handleReset = () => {
         this.props.actions.reset();
@@ -60,78 +98,90 @@ class LecturerFormClass extends React.Component<Props, IState> {
             this.props.actions.requestAdd();
         }
     }
+    onSubmit = async (values: any) => {
+        return undefined;
+    }
+    onUpdate = (prev, model: ILecturer) => {
+        this.props.actions.setValue(model);
+    }
     render() {
         const { editingId, editing, name } = this.props;
-        const attr = { required: true, dense: false };
         const selectOptions = [{ value: "0", label: "Мужчина" }, { value: "1", label: "Женщина" }];
-        const { FirstNameField, SecondNameField, LastNameField, FullNameField, GenderSelect } = this;
         return (
             <div>
                 <Typography use="title" tag={"div"}>{editing ? "Изменить" : "Добавить"} лектора</Typography>
                 <Typography use="subheading1" tag={"div"}>{name}</Typography>
-                <input name={"id"} value={editingId} hidden={true} />
-                <FirstNameField {...attr} onChange={this.handleInputChange} />
-                <SecondNameField {...attr} onChange={this.handleInputChange} />
-                <LastNameField {...attr} onChange={this.handleInputChange} />
-                <FullNameField {...attr} onChange={this.handleInputChange} />
-                <GenderSelect options={selectOptions} onChange={this.handleInputChange} />
-                <TextFieldHelperText>Optional help text.</TextFieldHelperText>
-                {/* <TextFieldHelperText persistent validationMsg id={7}>The field is required.</TextFieldHelperText> */}
+                <FormExt
+                    onSubmit={this.onSubmit}
+                    onReset={this.handleReset}
+                    onModelChange={this.onUpdate}
+                >
+                    <ValidationExt validator={formValidator}>
+                        <input name={"id"} value={editingId} hidden={true} />
+                        <FormTextField name={"firstName"} label={"First Name"} />
+                        <FormTextField name={"secondName"} label={"Second Name"} />
+                        <FormTextField name={"lastName"} label={"Last Name"} />
+                        <FormTextField name={"fullName"} label={"Full Name"} />
+                        <FormSelectField name={"gender"} label={"Gender"} options={selectOptions} />
 
-                <Button onClick={this.handleReset} hidden={!editing}>Отменить</Button>
-                <Button raised={true} onClick={this.handleSubmit}>
-                    {editing ? "Сохранить" : "Добавить"}
-                </Button>
+                        <Button type={"button"} onClick={this.handleReset} hidden={!editing}>Отменить</Button>
+                        <Button type={"button"} raised={true} onClick={this.handleSubmit}>
+                            {editing ? "Сохранить" : "Добавить"}
+                        </Button>
+                    </ValidationExt>
+                </FormExt>
             </div>
         );
     }
 }
 
-export const FormTextField = (name: string, label: string, ...attr: any[]) => connect(
-    state => ({
-        name,
-        id: name,
-        label,
-        value: getLecturer(state)[name],
-        ...attr,
-    }),
-    () => ({}),
-)(TextField);
+const mapErrors2 = (props, prevState, errors) => {
+    console.log(errors);
+    return ({ errors });
+};
 
-export const FormSelect = (name: string, label: string, ...attr: any[]) => connect(
-    state => ({
-        name,
-        id: name,
-        label,
-        value: getLecturer(state)[name] + "",
-        ...attr,
-    }),
-    () => ({}),
-)(Select);
+const stateReducer3 = (reducer: ILocalReducer<Props & IComponentId, IState>) => reducer
+    .on(lecturersActions.actions.form.setErrors, mapErrors2)
+    .on(lecturersActions.actions.form.setValue, state => ({ errors: [] }));
 
-const mapStateToProps = state => {
-    const mapState = getLecturerForm(state);
+const enhance3 = compose<typeof Validation>(
+    connectState<Props, IState>(
+        initState,
+        stateReducer3,
+    ),
+);
+
+export const ValidationExt = enhance3(Validation);
+
+const mapStateToProps2 = (state, props) => {
+    const lecturer = getLecturer(state);
     return {
-        editing: mapState.editing,
-        editingId: mapState.lecturer.id,
-        name: mapState.lecturer.fullName,
+        values: {
+            ...lecturer,
+            gender: "" + lecturer.gender,
+        },
     };
 };
 
-const mapErrors = (props, prevState, errors) => ({ errors });
+const enhance2 = compose<typeof Form>(
+    connect(
+        mapStateToProps2,
+        lecturersActions.mapDispatch.form,
+    ),
+);
 
-const stateReducer = (reducer: ILocalReducer<Props & IComponentId, IState>) => reducer
-    .on(lecturersActions.actions.lecturer.edit, mapErrors);
+export const FormExt = enhance2(Form);
 
-const initState = {
-    errors: "",
+const mapStateToProps = state => {
+    const { editing, lecturer: { id, fullName } } = getLecturerForm(state);
+    return {
+        editing,
+        editingId: id,
+        name: fullName,
+    };
 };
 
 const enhance = compose<React.ComponentClass>(
-    connectState<Props, IState>(
-        initState,
-        stateReducer,
-    ),
     connectWithComponentId(
         mapStateToProps,
         lecturersActions.mapDispatch.form,

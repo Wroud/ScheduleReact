@@ -10,7 +10,7 @@
     "experimentalDecorators": true,
     "sourceMap": true,
     "skipDefaultLibCheck": false,
-    "strict": true,
+    "strict": false,
     "lib": [ "es6", "dom" ],
     "types": [ "webpack-env" ],
     "paths": {
