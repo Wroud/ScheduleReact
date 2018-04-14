@@ -12,17 +12,16 @@ import { FormTextField } from "@app/components/FormTextField";
 import { IErrorMessage } from "@app/middlewares/JsonQuery";
 import { ILecturer } from "@app/store/database";
 import {
-    combineFieldValidators,
-    combineValidators,
     createFieldValidator,
     createFormValidator,
     createRawFormValidator,
     createValidator,
     Form,
-    FormContext,
-    IFieldErrors,
-    IFormState,
+    FormErrors,
+    IValidationProps,
+    IValidationState,
     Validation,
+    Validator,
 } from "react-painlessform";
 import { connectState, connectWithComponentId, IComponentId, ILocalReducer } from "redux-subreducer";
 import { lecturersActions } from "../../actions";
@@ -44,24 +43,44 @@ const mustBeNumber = value => (isNaN(value) ? "Must be a number" : undefined);
 const minValue = min => value =>
     isNaN(value) || value >= min ? undefined : `Should be greater than ${min}`;
 
-const requiredValidate = createValidator<string>("required", data => data === "" ? "Requered" : []);
-const minLengthValidate = createValidator<string>("min length 3", data => data.length < 3 && data.length > 0 ? "Min length 3" : []);
-const maxLengthValidate = createValidator<string>("max length 6", data => data.length > 6 ? "Max length 6" : []);
+const required: Validator<string, string | string[]> =
+    data =>
+        data === ""
+            ? "Requered"
+            : [];
+const minLength: Validator<string, string | string[]> =
+    data =>
+        data.length < 3
+            && data.length > 0
+            ? "Min length 3"
+            : [];
+const maxLength: Validator<string, string | string[]> =
+    data =>
+        data.length > 6
+            ? "Max length 6"
+            : [];
 
 const firstNameValidator = createFieldValidator<ILecturer, string>(
     "firstName",
-    combineValidators(maxLengthValidate, minLengthValidate, requiredValidate),
+    createValidator<string>("firstName", maxLength, minLength, required),
 );
 const lastNameValidator = createFieldValidator<ILecturer, string>(
     "lastName",
-    combineValidators(maxLengthValidate, minLengthValidate, requiredValidate),
+    createValidator<string>("lastName", maxLength, minLength, required),
 );
-const submitValidator = createRawFormValidator<ILecturer>((values, state: IState) => {
-    const errors = {};
-    if (!state) {
+
+interface IValidationMeta {
+    state: IValidationState & IState;
+    props: IValidationProps;
+}
+
+const submitValidator = createRawFormValidator<ILecturer, IValidationMeta>((values, meta) => {
+    // tslint:disable-next-line:no-object-literal-type-assertion
+    const errors: FormErrors<ILecturer> = {} as FormErrors<ILecturer>;
+    if (!meta.state) {
         return errors;
     }
-    const { errors: stateErrors } = state;
+    const { errors: stateErrors } = meta.state;
     if (stateErrors) {
         Object.keys(values).forEach(name => {
             const error = stateErrors.find(e => e.name.toLowerCase() === name.toLowerCase());
@@ -73,11 +92,9 @@ const submitValidator = createRawFormValidator<ILecturer>((values, state: IState
     return errors;
 });
 const formValidator = createFormValidator<ILecturer>(
-    combineFieldValidators(
-        firstNameValidator,
-        lastNameValidator,
-        submitValidator,
-    ),
+    firstNameValidator,
+    lastNameValidator,
+    submitValidator,
 );
 
 const initState: IState = {
