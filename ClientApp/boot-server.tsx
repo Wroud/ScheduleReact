@@ -7,6 +7,7 @@ import { Switch } from "react-router";
 import { StaticRouter } from "react-router-dom";
 import { replace } from "react-router-redux";
 import sagaMiddlewareFactory from "redux-saga";
+import { resetComponentId } from "redux-subreducer";
 import configureStore from "./configureStore";
 import { views } from "./loadViews";
 
@@ -37,6 +38,7 @@ export default createServerRenderer(params => {
         }
 
         params.domainTasks.then(() => {
+            resetComponentId();
             resolve({
                 html: renderToString(app),
                 globals: { initialReduxState: store.getState() },

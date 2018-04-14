@@ -1,5 +1,6 @@
 import { SagaIterator } from "redux-saga";
 import { createSubReducer, ISubReducer } from "redux-subreducer";
+import { IRootReducer } from "redux-subreducer/lib/reducer";
 import { IView, IViewState, IViewStatePart, View } from "./View";
 import { IViewRoute, mapRoutes } from "./ViewRoutes";
 
@@ -13,7 +14,7 @@ export interface IViewLoader<TAppState> {
 
     sagas: () => SagaIterator;
     getView: <TReducerState extends TReducerStateModifed, TState extends IViewStatePart, TReducerStateModifed = {}, TApi = {}>(name: string) => IView<TState, TReducerState, TApi>;
-    joinToReducer: (reducer: ISubReducer<TAppState, any>) => this;
+    joinToReducer: (reducer: IRootReducer<TAppState, any>) => this;
     load: () => this;
 }
 
@@ -61,7 +62,7 @@ export class ViewLoader<TAppState extends IViewStatePart>
         }
     }
 
-    joinToReducer = (reducer: ISubReducer<TAppState, any>) => {
+    joinToReducer = (reducer: IRootReducer<TAppState, any>) => {
         reducer.join(this._reducer);
         return this;
     }

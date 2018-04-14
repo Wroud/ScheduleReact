@@ -19,7 +19,7 @@ export interface IView<TAppState
     loader: ViewLoader<TAppState>;
     sagas?: () => SagaIterator;
     api?: TApi;
-    reducer?: ISubReducer<TAppState, TReducerState>;
+    reducer?: ISubReducer<IViewState, TReducerState>;
 }
 
 export class View<TAppState extends IViewStatePart, TReducerState, TApi>
@@ -31,7 +31,7 @@ export class View<TAppState extends IViewStatePart, TReducerState, TApi>
     // tslint:disable-next-line:variable-name
     private _navigation?: INavigationMember[];
     // tslint:disable-next-line:variable-name
-    private _reducer?: ISubReducer<TAppState, TReducerState>;
+    private _reducer?: ISubReducer<IViewState, TReducerState>;
     // tslint:disable-next-line:variable-name
     private _sagas?: () => SagaIterator;
     // tslint:disable-next-line:variable-name
@@ -40,7 +40,7 @@ export class View<TAppState extends IViewStatePart, TReducerState, TApi>
     constructor(
         name: string,
         navigation?: INavigationMember[],
-        reducer?: ISubReducer<TAppState, TReducerState>,
+        reducer?: ISubReducer<IViewState, TReducerState>,
         sagas?: () => SagaIterator,
         api?: TApi) {
 
@@ -77,10 +77,10 @@ export class View<TAppState extends IViewStatePart, TReducerState, TApi>
             throw new Error("stateSelector reducer is undefined");
             // return {} as any;
         }
-        return this.reducer.stateSelector(state) as TReducerState;
+        return this.reducer.stateSelector(state);
     }
 
     Api = (api: any): TApi => api[`${this.name}Api`];
 }
 
-export const createView = <TReducerState extends TReducerStateModifed, TAppState extends IViewStatePart, TReducerStateModifed, TApi= {}>(name: string, navigation?: INavigationMember[], reducer?: ISubReducer<TAppState, TReducerState>, sagas?: () => SagaIterator, api?: TApi) => new View<TAppState, TReducerState, TApi>(name, navigation, reducer, sagas, api);
+export const createView = <TReducerState extends TReducerStateModifed, TAppState extends IViewStatePart, TReducerStateModifed, TApi= {}>(name: string, navigation?: INavigationMember[], reducer?: ISubReducer<IViewState, TReducerState>, sagas?: () => SagaIterator, api?: TApi) => new View<TAppState, TReducerState, TApi>(name, navigation, reducer, sagas, api);
