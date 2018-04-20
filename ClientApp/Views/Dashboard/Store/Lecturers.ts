@@ -1,20 +1,20 @@
 import { ILecturer } from "@app/store/database";
 
 export interface ILecturerFormState {
-    loading: boolean;
-    editing: boolean;
+    isLoading: boolean;
+    isEditing: boolean;
     lecturer: ILecturer;
 }
 
 export interface ILecturersState {
+    isLoading: boolean;
     lecturers: string[];
     form: ILecturerFormState;
-    loading: boolean;
 }
 
 export const initLecturerFormState: Partial<ILecturerFormState> = {
-    loading: false,
-    editing: false,
+    isLoading: false,
+    isEditing: false,
     lecturer: {
         id: "",
         firstName: "",
@@ -26,7 +26,7 @@ export const initLecturerFormState: Partial<ILecturerFormState> = {
 };
 
 export const initLecturersState: Partial<ILecturersState> = {
+    isLoading: true,
     lecturers: [],
     form: initLecturerFormState as ILecturerFormState,
-    loading: true,
 };

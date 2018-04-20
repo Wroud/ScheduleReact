@@ -1,9 +1,26 @@
+.mdc-text-field-helper-text {
+    display: none;
+}
+
+.mdc-text-field-helper-text--persistent {
+    display: block;
+}
+
 .mdc-text-field-helper-text span {
     transition: all 0.25s linear;
     -webkit-animation: fadeInFromNone 0.25s ease-out;
     -moz-animation: fadeInFromNone 0.25s ease-out;
     -o-animation: fadeInFromNone 0.25s ease-out;
     animation: fadeInFromNone 0.25s ease-out;
+}
+
+.mdc-select+.mdc-text-field-helper-text {
+    margin-bottom: 8px;
+}
+
+.mdc-select:not(.mdc-text-field--disabled)+.mdc-text-field-helper-text {
+    color: rgba(0, 0, 0, 0.38);
+    color: var(--mdc-theme-text-hint-on-background, rgba(0, 0, 0, 0.38));
 }
 
 @-webkit-keyframes fadeInFromNone {

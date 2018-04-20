@@ -1,10 +1,11 @@
 import { JsonQueryResult } from "@app/middlewares/JsonQuery";
 import { takeEveryAction } from "@app/middlewares/sagaExtensions";
 import { dbContext, ILecturer } from "@app/store/database";
+import { delay } from "redux-saga";
 import { call, put, select } from "redux-saga/effects";
 import { lecturersActions } from "../actions";
 import { api } from "../api";
-import { getLecturer } from "../selectors";
+import { getLecturerLoading } from "../selectors";
 
 const { actions, creators } = lecturersActions;
 
@@ -32,7 +33,7 @@ export function* fetchData(action) {
 
 export function* submitLecturer(action) {
     yield put(actions.form.setLoading);
-    const lecturer: ILecturer = yield select(getLecturer);
+    const lecturer: ILecturer = yield select(getLecturerLoading);
     const { data, state, errors }: JsonQueryResult<ILecturer> = yield call(api.lecturers.addOrEdit, lecturer);
 
     if (state) {
@@ -40,10 +41,9 @@ export function* submitLecturer(action) {
         yield put(actions.form.reset);
         yield put(creators.lecturers.setLecturers(dbContext.lecturers.getAllIds()));
     } else {
-        console.log(errors);
         yield put(creators.form.setErrors(errors));
     }
-
+    yield call(delay, 100);
     yield put(actions.form.setLoaded);
 }
 

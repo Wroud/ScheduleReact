@@ -24,8 +24,8 @@ class Counter extends React.PureComponent<CounterProps> {
 
                 <p>Current count: <strong>{this.props.count}</strong></p>
 
-                <button onClick={this.props.increment}>Increment</button>
-                <button onClick={this.props.decrement}>Decrement</button>
+                <button onClick={this.props.increment as any}>Increment</button>
+                <button onClick={this.props.decrement as any}>Decrement</button>
             </div>
         );
     }

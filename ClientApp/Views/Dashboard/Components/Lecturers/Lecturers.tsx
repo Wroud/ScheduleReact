@@ -50,12 +50,12 @@ class LecturersClass extends React.PureComponent<LecturersProps> {
 }
 
 export const ListProgress = connect(
-    state => ({ determinate: !getLecturersState(state).loading }),
+    state => ({ determinate: !getLecturersState(state).isLoading }),
     () => ({}),
 )(LinearProgress);
 
 export const FormProgress = connect(
-    state => ({ determinate: !getLecturerForm(state).loading }),
+    state => ({ determinate: !getLecturerForm(state).isLoading }),
     () => ({}),
 )(LinearProgress);
 

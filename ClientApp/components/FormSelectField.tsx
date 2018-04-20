@@ -6,22 +6,33 @@ import {
 import { Select } from "rmwc/Select";
 import { TextFieldHelperText } from "rmwc/TextField";
 
+interface IOptions {
+    label: string;
+    value: string;
+    options?: IOptions;
+}
+interface IOptionsMap {
+    [value: string]: string;
+}
+
 interface IProps {
     name: string;
     label: string;
-    options;
+    options: IOptions[] | IOptionsMap[] | string[];
     required?: boolean;
+    [key: string]: any;
 }
 
 export class FormSelectField extends React.Component<IProps> {
     render() {
-        const { name, label, options, required } = this.props;
+        const { name, label, options, required, ...rest } = this.props;
         return (
-            <Field name={name} >
+            <Field name={name} {...rest} >
                 {({
                     name: fieldName,
                     value,
                     isVisited,
+                    isValid,
                     validationErrors,
                     onClick,
                     onChange,
@@ -30,17 +41,18 @@ export class FormSelectField extends React.Component<IProps> {
                             key={0}
                             id={fieldName}
                             name={fieldName}
-                            value={value}
+                            value={value || "0"}
                             label={label}
                             options={options}
                             required={required}
                             onClick={onClick}
                             onChange={onChange}
+                            {...rest}
                         />,
                         <TextFieldHelperText
                             key={1}
-                            persistent={isVisited || !!validationErrors}
-                            validationMsg={!!validationErrors}
+                            persistent={isVisited}
+                            validationMsg={!isValid}
                             children={validationErrors && validationErrors}
                         />,
                     ]}

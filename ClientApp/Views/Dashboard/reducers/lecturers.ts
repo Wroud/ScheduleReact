@@ -3,8 +3,8 @@ import { lecturersActions } from "../actions";
 import * as Store from "../store";
 const { actions, creators } = lecturersActions;
 
-const setLoading = (value: boolean) => () => ({ loading: value });
-const setEditing = (value: boolean) => () => ({ editing: value });
+const setLoading = (value: boolean) => () => ({ isLoading: value });
+const setEditing = (value: boolean) => () => ({ isEditing: value });
 const setFormInitState = () => Store.initLecturerFormState;
 const updateLecturers = (state, payload) => ({ lecturers: payload });
 const updateLecturer = (state, payload) => ({ lecturer: payload });

@@ -25,3 +25,9 @@ button[hidden] {
 .lecturer-form {
     padding: 25px 25px 40px 25px;
 }
+
+.form-actions {
+    display: flex;
+    justify-content: space-between;
+    margin: 16px 0px;
+}

@@ -1,7 +1,7 @@
 export {
     getLecturers,
     makeGetLecturer,
-    getLecturer,
+    getLecturerLoading,
     getLecturerForm,
     getLecturersState,
 } from "./lecturers";

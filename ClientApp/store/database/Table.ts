@@ -70,14 +70,14 @@ export class Table<T extends Tables> {
 
 export const openTable = <T extends Tables>(name: keyof IDatabaseState) => new Table<T>(name);
 
-export function SelectDatabase<T extends IDatabaseState[keyof IDatabaseState]>(db: (database: IDatabaseState) => T) {
+export function selectDatabase<T extends IDatabaseState[keyof IDatabaseState]>(db: (database: IDatabaseState) => T) {
     return (state: IApplicationState) => db(state.database);
 }
 
-export function SelectFromTable<T extends Tables, P>(table: (database: IDatabaseState) => ITable<T>, entryId: (props: P) => string) {
+export function selectFromTable<T extends Tables, P>(table: (database: IDatabaseState) => ITable<T>, entryId: (props: P) => string) {
     return (state: IApplicationState, props: P) => table(state.database)[entryId(props)];
 }
 
-export function SelectEntries<T extends Tables>(table: (database: IDatabaseState) => ITable<T>, entries: (state: IApplicationState) => string[]) {
+export function selectEntries<T extends Tables>(table: (database: IDatabaseState) => ITable<T>, entries: (state: IApplicationState) => string[]) {
     return (state: IApplicationState) => entries(state).map(entry => table(state.database)[entry]);
 }

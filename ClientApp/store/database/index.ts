@@ -5,8 +5,8 @@ export { reducer } from "./reducer";
 export {
     Table,
     openTable,
-    SelectDatabase,
-    SelectFromTable,
-    SelectEntries,
+    selectDatabase,
+    selectFromTable,
+    selectEntries,
 } from "./Table";
 export { dbContext } from "./dbContext";

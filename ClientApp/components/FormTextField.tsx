@@ -9,13 +9,14 @@ interface IProps {
     name: string;
     label: string;
     required?: boolean;
+    [key: string]: any;
 }
 
 export class FormTextField extends React.Component<IProps> {
     render() {
-        const { name, label, required } = this.props;
+        const { name, label, required, ...rest } = this.props;
         return (
-            <Field name={name}>
+            <Field name={name} {...rest}>
                 {({
                     name: fieldName,
                     value,
@@ -34,10 +35,11 @@ export class FormTextField extends React.Component<IProps> {
                             required={required}
                             onClick={onClick}
                             onChange={onChange}
+                            {...rest}
                         />,
                         <TextFieldHelperText
                             key={1}
-                            persistent={isVisited || !isValid}
+                            persistent={isVisited}
                             validationMsg={!isValid}
                         >
                             {validationErrors && validationErrors.map((error, id) => <span key={id}>{error}<br /></span>)}
