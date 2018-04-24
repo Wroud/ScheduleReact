@@ -43,7 +43,7 @@ export class FormSelectField<T> extends React.Component<IProps<T>> {
                     onChange,
                     formState,
                     children,
-                    ...fieldRest,
+                    rest: fieldRest,
                 }: IFieldClassProps<string, string, any>) =>
                     (
                         <>

@@ -30,7 +30,7 @@ export class FormTextField extends React.Component<IProps> {
                     onChange,
                     formState,
                     children: _,
-                    ...fieldRest,
+                    rest: fieldRest,
                 }: IFieldClassProps<string, string, any>) =>
                     (
                         <>
