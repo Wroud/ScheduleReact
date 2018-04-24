@@ -7,12 +7,13 @@ import { Switch } from "react-router";
 import { StaticRouter } from "react-router-dom";
 import { replace } from "react-router-redux";
 import sagaMiddlewareFactory from "redux-saga";
-import { resetComponentId } from "redux-subreducer";
+import { Logging, LoggingLevel, resetComponentId } from "redux-subreducer";
 import configureStore from "./configureStore";
 import { views } from "./loadViews";
 
 export default createServerRenderer(params => {
     return new Promise<RenderResult>((resolve, reject) => {
+        Logging.setLevel(LoggingLevel.warn);
         const basename = params.baseUrl.substring(0, params.baseUrl.length - 1); // remove trailing slash
         const urlAfterBasename = params.url.substring(basename.length);
 

@@ -6,10 +6,12 @@ import { Provider } from "react-redux";
 import { Switch } from "react-router";
 import { ConnectedRouter } from "react-router-redux";
 import sagaMiddlewareFactory from "redux-saga";
+import { Logging, LoggingLevel } from "redux-subreducer";
 import configureStore from "./configureStore";
 import * as ViewsLoader from "./loadViews";
 import "./styles/style.scss";
 
+Logging.setLevel(LoggingLevel.warn);
 const baseUrl = document.getElementsByTagName("base")[0].getAttribute("href")!;
 const history = createBrowserHistory({ basename: baseUrl });
 
