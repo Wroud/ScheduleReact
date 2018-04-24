@@ -1,10 +1,10 @@
 import { compose } from "redux";
-import { connectWithComponentId } from "redux-subreducer";
+import { connectWithComponentId, getState } from "redux-subreducer";
 
 import { IErrorMessage } from "@app/middlewares/JsonQuery";
 
 import { lecturersActions } from "../../../actions";
-import { getLecturerFormEditing } from "../../../selectors/lecturers";
+import { lecturerFormReducer } from "../../../reducers/lecturers";
 
 import { LecturerFormClass } from "./LecturerFormClass";
 
@@ -14,7 +14,12 @@ export interface IState {
 
 const enhance = compose<React.ComponentClass>(
     connectWithComponentId(
-        state => ({ isEditing: getLecturerFormEditing(state) }),
+        getState(
+            {
+                form: lecturerFormReducer,
+            },
+            ({ form: { isEditing } }) => ({ isEditing }),
+        ),
         lecturersActions.mapDispatch.form,
     ),
 );

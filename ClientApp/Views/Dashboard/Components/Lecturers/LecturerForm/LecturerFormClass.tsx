@@ -9,8 +9,11 @@ import { ILecturer } from "@app/store/database";
 
 import { lecturersActions } from "../../../actions";
 
+import { createFormFactory } from "react-painlessform";
 import { Form, FormContext } from "./Form";
 import { formValidator, Validation } from "./Validation";
+
+const { Field } = createFormFactory<ILecturer>();
 
 export type Props =
     {
@@ -19,73 +22,73 @@ export type Props =
     & typeof lecturersActions.mapCreators.form;
 
 export class LecturerFormClass extends React.Component<Props> {
-    constructor(props: Props) {
-        super(props);
-    }
-    handleReset = () => {
-        this.props.actions.reset();
-    }
-    handleSubmit = () => {
-        if (this.props.isEditing) {
-            this.props.actions.requestSave();
+    selectOptions = [
+        { value: "0", label: "Мужчина" },
+        { value: "1", label: "Женщина" },
+    ];
+    handleModelUpdate = (model: ILecturer) => this.props.actions.setValue(model);
+    handleReset = () => this.props.actions.reset();
+    handleSubmit = () => (values: any) => {
+        const { isEditing, actions } = this.props;
+        if (isEditing) {
+            actions.requestSave();
         } else {
-            this.props.actions.requestAdd();
+            actions.requestAdd();
         }
-    }
-    onSubmit = (values: any) => {
-        this.handleSubmit();
-    }
-    onUpdate = (model: ILecturer) => {
-        this.props.actions.setValue(model);
     }
     render() {
         const { isEditing } = this.props;
-        const selectOptions = [{ value: "0", label: "Мужчина" }, { value: "1", label: "Женщина" }];
         return (
-            <div>
-                <Form
-                    onSubmit={this.onSubmit}
-                    onReset={this.handleReset}
-                    onModelChange={this.onUpdate}
-                >
-                    <FormContext>
-                        {({ isSubmitting, model }) => (
-                            <Validation validator={formValidator}>
-                                <Typography use="title" tag={"div"}>{isEditing ? "Изменить" : "Добавить"} лектора</Typography>
-                                <Typography use="subheading1" tag={"div"}>{model.fullName}</Typography>
+            <Form
+                onSubmit={this.handleSubmit}
+                onReset={this.handleReset}
+                onModelChange={this.handleModelUpdate}
+            >
+                <FormContext>
+                    {({ isSubmitting, model }) => (
+                        <Validation validator={formValidator}>
+                            <Typography use="title" tag={"div"}>
+                                {isEditing ? "Изменить" : "Добавить"} лектора
+                            </Typography>
+                            <Typography use="subheading1" tag={"div"}>
+                                {model.fullName.value}
+                            </Typography>
 
-                                <input name={"id"} value={model.id} hidden={true} />
+                            <input name={"id"} value={model.id.value} readOnly={true} hidden={true} />
 
-                                <FormTextField name={"firstName"} label={"First Name"} disabled={isSubmitting} />
-                                <FormTextField name={"secondName"} label={"Second Name"} disabled={isSubmitting} />
-                                <FormTextField name={"lastName"} label={"Last Name"} disabled={isSubmitting} />
-                                <FormTextField name={"fullName"} label={"Full Name"} disabled={isSubmitting} />
-                                <FormSelectField
-                                    name={"gender"}
-                                    placeholder="Gender"
-                                    label={"Gender"}
-                                    options={selectOptions}
+                            <Field name={"firstName"} disabled={isSubmitting}>
+                                <FormTextField label={"First Name"} />
+                            </Field>
+                            <Field name={"secondName"} disabled={isSubmitting}>
+                                <FormTextField label={"Second Name"} />
+                            </Field>
+                            <Field name={"lastName"} disabled={isSubmitting}>
+                                <FormTextField label={"Last Name"} />
+                            </Field>
+                            <Field name={"fullName"} disabled={isSubmitting}>
+                                <FormTextField label={"Full Name"} />
+                            </Field>
+                            <Field name={"gender"} disabled={isSubmitting}>
+                                <FormSelectField label={"Gender"} options={this.selectOptions} />
+                            </Field>
+
+                            <div className={"form-actions"}>
+                                <Button
+                                    type={"button"}
+                                    onClick={this.handleReset}
+                                    hidden={!isEditing}
                                     disabled={isSubmitting}
-                                />
-
-                                <div className={"form-actions"}>
-                                    <Button
-                                        type={"button"}
-                                        onClick={this.handleReset}
-                                        hidden={!isEditing}
-                                        disabled={isSubmitting}
-                                    >
-                                        Отменить
-                                    </Button>
-                                    <Button type={"submit"} raised={true} disabled={isSubmitting}>
-                                        {isEditing ? "Сохранить" : "Добавить"}
-                                    </Button>
-                                </div>
-                            </Validation>
-                        )}
-                    </FormContext>
-                </Form>
-            </div>
+                                >
+                                    Отменить
+                                </Button>
+                                <Button type={"submit"} raised={true} disabled={isSubmitting}>
+                                    {isEditing ? "Сохранить" : "Добавить"}
+                                </Button>
+                            </div>
+                        </Validation>
+                    )}
+                </FormContext>
+            </Form>
         );
     }
 }

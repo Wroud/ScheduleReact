@@ -1,62 +1,74 @@
 import * as React from "react";
 import {
-    Field,
+    FieldContext,
     Form,
+    IField,
+    IFieldClass,
+    IFieldClassProps,
 } from "react-painlessform";
 import { Select } from "rmwc/Select";
 import { TextFieldHelperText } from "rmwc/TextField";
 
-interface IOptions {
+interface IOptions<V> {
     label: string;
-    value: string;
-    options?: IOptions;
+    value: V;
+    options?: IOptions<V>;
 }
-interface IOptionsMap {
-    [value: string]: string;
+interface IOptionsMap<V> {
+    [value: string]: V;
 }
 
-interface IProps {
-    name: string;
+interface IProps<T> {
+
     label: string;
-    options: IOptions[] | IOptionsMap[] | string[];
+    options: Array<IOptions<T>> | Array<IOptionsMap<T>> | T[];
     required?: boolean;
     [key: string]: any;
 }
 
-export class FormSelectField extends React.Component<IProps> {
+export class FormSelectField<T> extends React.Component<IProps<T>> {
     render() {
-        const { name, label, options, required, ...rest } = this.props;
+        const { field, name, label, options, required, ...rest } = this.props;
         return (
-            <Field name={name} {...rest} >
+            <FieldContext>
                 {({
                     name: fieldName,
                     value,
+                    isChanged,
                     isVisited,
                     isValid,
                     validationErrors,
+                    validationScope,
                     onClick,
                     onChange,
-                }) => [
-                        <Select
-                            key={0}
-                            id={fieldName}
-                            name={fieldName}
-                            value={value || "0"}
-                            label={label}
-                            options={options}
-                            required={required}
-                            onClick={onClick}
-                            onChange={onChange}
-                            {...rest}
-                        />,
-                        <TextFieldHelperText
-                            key={1}
-                            persistent={isVisited}
-                            validationMsg={!isValid}
-                            children={validationErrors && validationErrors}
-                        />,
-                    ]}
-            </Field>
+                    formState,
+                    children,
+                    ...fieldRest,
+                }: IFieldClassProps<string, string, any>) =>
+                    (
+                        <>
+                            <Select
+                                id={fieldName}
+                                name={fieldName}
+                                value={value || "0"}
+                                label={label}
+                                options={options}
+                                required={required}
+                                onClick={onClick}
+                                onChange={onChange}
+                                {...rest}
+                                {...fieldRest}
+                            />
+                            <TextFieldHelperText
+                                persistent={isVisited}
+                                validationMsg={!isValid}
+                            >
+                                {validationErrors && validationErrors.map((error, id) => <span key={id}>{error.message}<br /></span>)}
+                            </TextFieldHelperText>
+                        </>
+                    )
+                }
+            </FieldContext>
         );
     }
 }

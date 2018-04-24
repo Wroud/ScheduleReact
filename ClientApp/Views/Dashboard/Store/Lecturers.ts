@@ -3,6 +3,7 @@ import { ILecturer } from "@app/store/database";
 export interface ILecturerFormState {
     isLoading: boolean;
     isEditing: boolean;
+    isReset: boolean;
     lecturer: ILecturer;
 }
 
@@ -15,13 +16,14 @@ export interface ILecturersState {
 export const initLecturerFormState: Partial<ILecturerFormState> = {
     isLoading: false,
     isEditing: false,
+    isReset: true,
     lecturer: {
         id: "",
         firstName: "",
         lastName: "",
         secondName: "",
         fullName: "",
-        gender: "",
+        gender: "0",
     },
 };
 

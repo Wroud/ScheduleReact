@@ -6,6 +6,7 @@ import { call, put, select } from "redux-saga/effects";
 import { lecturersActions } from "../actions";
 import { api } from "../api";
 import { getLecturerLoading } from "../selectors";
+import { getLecturer } from "../selectors/lecturers";
 
 const { actions, creators } = lecturersActions;
 
@@ -33,7 +34,7 @@ export function* fetchData(action) {
 
 export function* submitLecturer(action) {
     yield put(actions.form.setLoading);
-    const lecturer: ILecturer = yield select(getLecturerLoading);
+    const lecturer: ILecturer = yield select(getLecturer);
     const { data, state, errors }: JsonQueryResult<ILecturer> = yield call(api.lecturers.addOrEdit, lecturer);
 
     if (state) {
@@ -43,7 +44,7 @@ export function* submitLecturer(action) {
     } else {
         yield put(creators.form.setErrors(errors));
     }
-    yield call(delay, 100);
+    // yield call(delay, 100);
     yield put(actions.form.setLoaded);
 }
 

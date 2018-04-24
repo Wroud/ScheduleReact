@@ -1,5 +1,7 @@
+import { lecturerFormReducer, lecturersReducer } from "@app/Views/Dashboard/reducers/lecturers";
 import * as React from "react";
 import { connect } from "react-redux";
+import { getState } from "redux-subreducer";
 import {
     List,
 } from "rmwc/List";
@@ -27,6 +29,10 @@ export class LecturersList extends React.PureComponent<Props> {
 }
 
 export default connect(
-    state => ({ lecturers: getLecturers(state) }),
+    getState({
+        lecturers: lecturersReducer,
+        form: lecturerFormReducer,
+    },
+        ({ lecturers: { lecturers }, form }) => ({ lecturers })), // state => ({ lecturers: getLecturers(state) }),
     lecturersActions.mapDispatch.lecturers,
 )(LecturersList);

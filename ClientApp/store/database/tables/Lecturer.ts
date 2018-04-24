@@ -7,3 +7,11 @@ export interface ILecturer {
     fullName: string;
     gender: string;
 }
+export const defaultLecturer: ILecturer = {
+    id: "",
+    firstName: "",
+    lastName: "",
+    secondName: "",
+    fullName: "",
+    gender: "0",
+};

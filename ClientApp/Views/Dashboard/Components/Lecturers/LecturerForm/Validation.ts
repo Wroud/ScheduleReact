@@ -32,7 +32,11 @@ const submitValidator = createRawFormValidator<ILecturer, IValidationMeta>((valu
         Object.keys(values).forEach(name => {
             const error = stateErrors.find(e => e.name.toLowerCase() === name.toLowerCase());
             if (error) {
-                errors[name] = [...(errors[name] || []), error.message];
+                const message = {
+                    message: error.message,
+                    meta: { type: "server" },
+                };
+                errors[name] = [...(errors[name] || []), message];
             }
         });
     }

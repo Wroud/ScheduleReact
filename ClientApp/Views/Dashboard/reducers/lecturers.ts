@@ -1,3 +1,4 @@
+import { ILecturer } from "@app/store/database";
 import { createSubReducer } from "redux-subreducer";
 import { lecturersActions } from "../actions";
 import * as Store from "../store";
@@ -6,8 +7,12 @@ const { actions, creators } = lecturersActions;
 const setLoading = (value: boolean) => () => ({ isLoading: value });
 const setEditing = (value: boolean) => () => ({ isEditing: value });
 const setFormInitState = () => Store.initLecturerFormState;
-const updateLecturers = (state, payload) => ({ lecturers: payload });
-const updateLecturer = (state, payload) => ({ lecturer: payload });
+const updateLecturers = (state: Store.ILecturersState, payload: string[]) => ({ lecturers: payload });
+const updateLecturer = (state: Store.ILecturerFormState, payload: ILecturer) =>
+    ({
+        lecturer: payload,
+        isReset: state.lecturer.id !== payload.id,
+    });
 
 export const lecturerFormReducer =
     createSubReducer<Store.ILecturersState, Store.ILecturerFormState>("form", Store.initLecturerFormState)
